@@ -21,6 +21,12 @@ import FullscreenZoomFrame from './FullscreenZoomFrame.vue'
           <marker id="dot" markerWidth="6" markerHeight="6" refX="3" refY="3">
             <circle cx="3" cy="3" r="3" fill="#bdc3c7" />
           </marker>
+          <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#bdc3c7" />
+          </marker>
+          <marker id="noteArrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth">
+            <path d="M 0 0 L 9 4.5 L 0 9 z" fill="#8a96a3" />
+          </marker>
         </defs>
 
         <rect width="1100" height="750" fill="#1a1a1a" />
@@ -28,9 +34,9 @@ import FullscreenZoomFrame from './FullscreenZoomFrame.vue'
 
         <!-- ГЛАВНАЯ ШИНА ПИТАНИЯ (только линии, без текста поверх) -->
         <!-- BAT+ шина -->
-        <path d="M 150 280 L 850 280" fill="none" stroke="#e74c3c" stroke-width="4" />
+        <path d="M 150 280 L 780 280" fill="none" stroke="#e74c3c" stroke-width="4" />
         <!-- GND шина -->
-        <path d="M 150 320 L 850 320" fill="none" stroke="#3498db" stroke-width="4" />
+        <path d="M 150 320 L 810 320" fill="none" stroke="#3498db" stroke-width="4" />
 
         <!-- Питание от бочек -->
         <rect x="50" y="250" width="100" height="100" fill="#34495e" stroke="#7f8c8d" stroke-width="3" rx="8" />
@@ -39,12 +45,14 @@ import FullscreenZoomFrame from './FullscreenZoomFrame.vue'
 
         <!-- ВОДЯНОЕ ЗАЗЕМЛЕНИЕ -->
         <rect x="50" y="460" width="300" height="200" fill="rgba(52, 152, 219, 0.15)" stroke="#2980b9" stroke-width="2" rx="10" />
-        <path d="M 50 490 Q 125 470 200 490 T 350 490" fill="none" stroke="#3498db" stroke-width="2" />
-        <text x="60" y="480" fill="#3498db" font-size="14" font-weight="bold">Незамерзающий водоём</text>
-        <text x="60" y="655" fill="#bdc3c7" font-size="12">Глубина ниже уровня промерзания</text>
+        <rect x="58" y="466" width="178" height="22" fill="#13283a" />
+        <text x="66" y="482" fill="#c7e6ff" font-size="13" font-weight="bold">Незамерзающий водоём</text>
+        <path d="M 50 510 Q 125 490 200 510 T 350 510" fill="none" stroke="#3498db" stroke-width="2" />
+        <rect x="58" y="636" width="205" height="18" fill="rgba(15, 23, 42, 0.65)" />
+        <text x="66" y="650" fill="#d5dde6" font-size="11">Глубина ниже уровня промерзания</text>
 
         <!-- Провод заземления (чистая линия) -->
-        <path d="M 180 320 L 180 560" fill="none" stroke="#3498db" stroke-width="4" />
+        <path d="M 180 320 L 180 460 M 180 490 L 180 560" fill="none" stroke="#3498db" stroke-width="4" />
 
         <!-- Консервная банка (Центр звезды) -->
         <ellipse cx="180" cy="560" rx="15" ry="8" fill="#95a5a6" stroke="#f1c40f" stroke-width="2" />
@@ -100,9 +108,10 @@ import FullscreenZoomFrame from './FullscreenZoomFrame.vue'
 
         <!-- Блок 4: MOSFET Модуль -->
         <rect x="750" y="160" width="100" height="80" fill="#2c3e50" stroke="#e74c3c" stroke-width="2" rx="4" />
-        <text x="760" y="185" fill="#e74c3c" font-size="14" font-weight="bold">MOSFET Ключ</text>
-        <text x="760" y="205" fill="#bdc3c7" font-size="12">(LR7843 / D4184)</text>
-        <text x="770" y="225" fill="#bdc3c7" font-size="12">Logic Level</text>
+        <text x="800" y="182" fill="#e74c3c" font-size="13" font-weight="bold" text-anchor="middle">MOSFET</text>
+        <text x="800" y="198" fill="#e74c3c" font-size="13" font-weight="bold" text-anchor="middle">Ключ</text>
+        <text x="800" y="216" fill="#bdc3c7" font-size="11" text-anchor="middle">LR7843 / D4184</text>
+        <text x="800" y="232" fill="#bdc3c7" font-size="11" text-anchor="middle">Logic Level</text>
         <!-- Соединения блока (чистые линии) -->
         <path d="M 780 280 L 780 240" fill="none" stroke="#e74c3c" stroke-width="3" />
         <path d="M 810 320 L 810 240" fill="none" stroke="#3498db" stroke-width="3" />
@@ -129,48 +138,91 @@ import FullscreenZoomFrame from './FullscreenZoomFrame.vue'
         <path d="M 850 205 L 938 205 L 938 440 L 870 440" fill="none" stroke="#e74c3c" stroke-width="3" stroke-linejoin="round" />
 
         <!-- Земля фильтра -->
-        <path d="M 800 480 L 800 320" fill="none" stroke="#3498db" stroke-width="3" />
-        <circle cx="800" cy="320" r="5" fill="#3498db" />
+        <path d="M 840 480 L 840 500 L 900 500 L 900 320 L 810 320" fill="none" stroke="#3498db" stroke-width="3" stroke-linejoin="round" />
 
         <!-- Антенна (чистые линии) -->
         <path d="M 730 440 L 680 440 L 680 560" fill="none" stroke="#2ecc71" stroke-width="3" />
         <path d="M 680 560 L 640 600 M 680 560 L 720 600 M 680 560 L 680 620" fill="none" stroke="#2ecc71" stroke-width="2" />
 
         <!-- ═════════════════════════════════════════════════════════════════════════ -->
-        <!-- АННОТАЦИИ (Прямое размещение и инженерные выноски) -->
+        <!-- АННОТАЦИИ: отдельные выноски, чтобы текст не лежал на линиях схемы -->
         <!-- ═════════════════════════════════════════════════════════════════════════ -->
 
-        <!-- Питание (над/под линиями) -->
-        <text x="160" y="272" fill="#e74c3c" font-size="12" font-weight="bold">BAT+ (Силовой)</text>
-        <text x="160" y="338" fill="#3498db" font-size="12" font-weight="bold">GND- (Силовой)</text>
+        <!-- Выноска: BAT+ шина -->
+        <rect x="18" y="180" width="158" height="54" fill="rgba(15, 23, 42, 0.82)" stroke="#8a96a3" stroke-width="1" stroke-dasharray="5 3" />
+        <circle cx="39" cy="203" r="8" fill="none" stroke="#e74c3c" stroke-width="1.5" />
+        <text x="39" y="207" fill="#e74c3c" font-size="11" font-weight="bold" text-anchor="middle">i</text>
+        <text x="54" y="203" fill="#d5dde6" font-size="11" font-weight="bold">BAT+ силовая шина</text>
+        <text x="54" y="222" fill="#9aa8b6" font-size="9">напрямую к ключу</text>
+        <path d="M 176 232 L 214 252 L 238 275" fill="none" stroke="#8a96a3" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#noteArrow)" />
 
-        <!-- Логика и Сигналы (над линиями) -->
-        <text x="490" y="112" fill="#e67e22" font-size="12" font-weight="bold" text-anchor="middle">+5V (Питание логики)</text>
-        <text x="550" y="192" fill="#2ecc71" font-size="11" font-weight="bold" text-anchor="middle">Audio (DAC_R)</text>
-        <text x="725" y="207" fill="#f1c40f" font-size="11" font-weight="bold" text-anchor="middle">PWM (D9) → 1219 кГц</text>
+        <!-- Выноска: GND шина -->
+        <rect x="18" y="360" width="150" height="44" fill="rgba(15, 23, 42, 0.82)" stroke="#8a96a3" stroke-width="1" stroke-dasharray="5 3" />
+        <circle cx="39" cy="380" r="8" fill="none" stroke="#3498db" stroke-width="1.5" />
+        <text x="39" y="384" fill="#3498db" font-size="11" font-weight="bold" text-anchor="middle">i</text>
+        <text x="54" y="380" fill="#d5dde6" font-size="11" font-weight="bold">GND силовая шина</text>
+        <text x="54" y="397" fill="#9aa8b6" font-size="9">общий минус системы</text>
+        <path d="M 168 360 L 215 335 L 238 324" fill="none" stroke="#8a96a3" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#noteArrow)" />
+
+        <!-- Выноска: +5V логика -->
+        <rect x="390" y="52" width="152" height="50" fill="rgba(15, 23, 42, 0.82)" stroke="#8a96a3" stroke-width="1" stroke-dasharray="5 3" />
+        <circle cx="407" cy="70" r="8" fill="none" stroke="#e67e22" stroke-width="1.5" />
+        <text x="407" y="74" fill="#e67e22" font-size="11" font-weight="bold" text-anchor="middle">i</text>
+        <text x="422" y="70" fill="#d5dde6" font-size="11" font-weight="bold">+5V логика</text>
+        <text x="422" y="87" fill="#9aa8b6" font-size="9">DFPlayer и Arduino</text>
+        <path d="M 455 102 L 455 117" fill="none" stroke="#8a96a3" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#noteArrow)" />
+
+        <!-- Выноска: аудиосигнал -->
+        <rect x="420" y="370" width="142" height="44" fill="rgba(15, 23, 42, 0.82)" stroke="#8a96a3" stroke-width="1" stroke-dasharray="5 3" />
+        <circle cx="437" cy="388" r="8" fill="none" stroke="#2ecc71" stroke-width="1.5" />
+        <text x="437" y="392" fill="#2ecc71" font-size="11" font-weight="bold" text-anchor="middle">i</text>
+        <text x="452" y="388" fill="#d5dde6" font-size="11" font-weight="bold">Audio DAC_R</text>
+        <text x="452" y="405" fill="#9aa8b6" font-size="9">модуляция звука</text>
+        <path d="M 562 388 L 565 250 L 552 205" fill="none" stroke="#8a96a3" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#noteArrow)" />
+
+        <!-- Выноска: ШИМ-несущая -->
+        <rect x="708" y="70" width="152" height="50" fill="rgba(15, 23, 42, 0.82)" stroke="#8a96a3" stroke-width="1" stroke-dasharray="5 3" />
+        <circle cx="725" cy="89" r="8" fill="none" stroke="#f1c40f" stroke-width="1.5" />
+        <text x="725" y="93" fill="#f1c40f" font-size="11" font-weight="bold" text-anchor="middle">i</text>
+        <text x="740" y="90" fill="#d5dde6" font-size="11" font-weight="bold">PWM D9</text>
+        <text x="740" y="107" fill="#9aa8b6" font-size="9">несущая 1219 кГц</text>
+        <path d="M 750 120 L 735 158 L 730 215" fill="none" stroke="#8a96a3" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#noteArrow)" />
 
         <!-- Выноска: Толстый спуск -->
-        <line x1="180" y1="435" x2="200" y2="435" stroke="#bdc3c7" stroke-width="1" marker-start="url(#dot)" />
-        <text x="205" y="439" fill="#3498db" font-size="12" font-weight="bold">Толстый спуск (GND)</text>
+        <rect x="205" y="388" width="142" height="44" fill="rgba(15, 23, 42, 0.82)" stroke="#8a96a3" stroke-width="1" stroke-dasharray="5 3" />
+        <circle cx="222" cy="408" r="8" fill="none" stroke="#3498db" stroke-width="1.5" />
+        <text x="222" y="412" fill="#3498db" font-size="11" font-weight="bold" text-anchor="middle">i</text>
+        <text x="237" y="412" fill="#d5dde6" font-size="11" font-weight="bold">Толстый спуск GND</text>
+        <path d="M 205 410 L 184 430" fill="none" stroke="#8a96a3" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#noteArrow)" />
 
         <!-- Выноска: Консервная банка -->
-        <line x1="195" y1="560" x2="230" y2="560" stroke="#bdc3c7" stroke-width="1" marker-start="url(#dot)" />
-        <text x="235" y="556" fill="#f1c40f" font-size="11" font-weight="bold">Консервная банка</text>
-        <text x="235" y="570" fill="#bdc3c7" font-size="10">(Центр звезды, пайка)</text>
+        <rect x="365" y="505" width="145" height="44" fill="rgba(15, 23, 42, 0.82)" stroke="#8a96a3" stroke-width="1" stroke-dasharray="5 3" />
+        <circle cx="382" cy="524" r="8" fill="none" stroke="#f1c40f" stroke-width="1.5" />
+        <text x="382" y="528" fill="#f1c40f" font-size="11" font-weight="bold" text-anchor="middle">i</text>
+        <text x="397" y="524" fill="#d5dde6" font-size="11" font-weight="bold">Консервная банка</text>
+        <text x="397" y="541" fill="#9aa8b6" font-size="9">центр звезды, пайка</text>
+        <path d="M 365 530 L 198 560" fill="none" stroke="#8a96a3" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#noteArrow)" />
 
         <!-- Выноска: 8 лучей -->
-        <line x1="230" y1="605" x2="250" y2="620" stroke="#bdc3c7" stroke-width="1" marker-start="url(#dot)" />
-        <text x="255" y="625" fill="#e67e22" font-size="11" font-weight="bold">8 лучей медной плетёнки</text>
-        <text x="255" y="640" fill="#bdc3c7" font-size="10">(Топология «Звезда»)</text>
+        <rect x="365" y="565" width="190" height="44" fill="rgba(15, 23, 42, 0.82)" stroke="#8a96a3" stroke-width="1" stroke-dasharray="5 3" />
+        <circle cx="382" cy="584" r="8" fill="none" stroke="#e67e22" stroke-width="1.5" />
+        <text x="382" y="588" fill="#e67e22" font-size="11" font-weight="bold" text-anchor="middle">i</text>
+        <text x="397" y="584" fill="#d5dde6" font-size="11" font-weight="bold">8 лучей медной плетёнки</text>
+        <text x="397" y="601" fill="#9aa8b6" font-size="9">топология «Звезда»</text>
+        <path d="M 365 590 L 292 590 L 232 575" fill="none" stroke="#8a96a3" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#noteArrow)" />
 
         <!-- Выноска: ВЧ меандр -->
-        <line x1="938" y1="315" x2="955" y2="315" stroke="#bdc3c7" stroke-width="1" marker-start="url(#dot)" />
-        <text x="960" y="311" fill="#e74c3c" font-size="12" font-weight="bold">ВЧ меандр →</text>
-        <text x="960" y="326" fill="#e74c3c" font-size="12" font-weight="bold">LC-ФНЧ (1219 кГц)</text>
+        <rect x="965" y="332" width="125" height="50" fill="rgba(15, 23, 42, 0.82)" stroke="#8a96a3" stroke-width="1" stroke-dasharray="5 3" />
+        <circle cx="982" cy="351" r="8" fill="none" stroke="#e74c3c" stroke-width="1.5" />
+        <text x="982" y="355" fill="#e74c3c" font-size="11" font-weight="bold" text-anchor="middle">i</text>
+        <text x="997" y="351" fill="#d5dde6" font-size="11" font-weight="bold">ВЧ меандр</text>
+        <text x="997" y="368" fill="#9aa8b6" font-size="9">к LC-ФНЧ 1219 кГц</text>
+        <path d="M 965 355 L 940 355" fill="none" stroke="#8a96a3" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#noteArrow)" />
 
         <!-- Антенна (под символом) -->
-        <text x="680" y="645" fill="#2ecc71" font-size="12" font-weight="bold" text-anchor="middle">В Антенну («Длинный луч»)</text>
-        <text x="680" y="660" fill="#bdc3c7" font-size="11" text-anchor="middle">Чистая синусоида (АМ)</text>
+        <rect x="580" y="633" width="200" height="49" fill="rgba(15, 23, 42, 0.82)" stroke="#8a96a3" stroke-width="1" stroke-dasharray="5 3" />
+        <text x="680" y="653" fill="#d5dde6" font-size="12" font-weight="bold" text-anchor="middle">В антенну: длинный луч</text>
+        <text x="680" y="670" fill="#9aa8b6" font-size="11" text-anchor="middle">Чистая синусоида (АМ)</text>
 
       </svg>
     </FullscreenZoomFrame>
