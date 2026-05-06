@@ -25,22 +25,32 @@ const telegramUrl = ref('')
 function renderRecaptcha() {
   if (!window.grecaptcha) return
 
-  ;[recaptchaContainerTop.value, recaptchaContainerBottom.value].forEach((el) => {
-    if (!el) return
+  const renderWidgets = () => {
+    ;[recaptchaContainerTop.value, recaptchaContainerBottom.value].forEach((el) => {
+      if (!el) return
 
-    try {
-      window.grecaptcha.render(el, {
-        sitekey: '6LcE-dssAAAAADXr3BTVYE3EYvfrR5-uGp6wIyaq',
-        theme: 'dark'
-      })
-    } catch {
-      // Контакт не должен исчезать у людей, если Google reCAPTCHA недоступна.
-    }
-  })
+      try {
+        window.grecaptcha.render(el, {
+          sitekey: '6LcE-dssAAAAADXr3BTVYE3EYvfrR5-uGp6wIyaq',
+          theme: 'dark',
+          size: 'compact'
+        })
+      } catch {
+        // Контакт не должен исчезать у людей, если Google reCAPTCHA недоступна.
+      }
+    })
+  }
+
+  if (typeof window.grecaptcha.ready === 'function') {
+    window.grecaptcha.ready(renderWidgets)
+    return
+  }
+
+  renderWidgets()
 }
 
 onMounted(() => {
-  telegramUrl.value = 'https://' + ['t', 'm', 'e'].join('.') + '/' + ['s', 'e', 'v', 'n', 'e', 't'].join('')
+  telegramUrl.value = 'https://' + ['t', 'me'].join('.') + '/' + ['s', 'e', 'v', 'n', 'e', 't'].join('')
 
   if (window.grecaptcha) {
     renderRecaptcha()
