@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-night text-gray-200 font-sans;
+  }
+
+  h1, h2, h3, h4, h5 {
+    @apply text-white font-semibold;
+  }
+
+  code {
+    @apply font-mono text-blue-300 bg-gray-900 px-1.5 py-0.5 rounded text-sm;
+  }
+
+  a {
+    @apply text-accent-blue hover:text-blue-300 underline underline-offset-2 transition-colors;
+  }
+}
+
+@layer components {
+  .section-card {
+    @apply bg-white/[0.04] border border-white/10 rounded-2xl p-6 md:p-8 mb-6 backdrop-blur-sm;
+  }
+
+  .section-heading {
+    @apply text-2xl font-bold mb-4 flex items-center gap-3;
+  }
+
+  .highlight-box {
+    @apply bg-blue-950/40 border-l-4 border-accent-blue p-4 rounded-r-lg my-4 text-gray-300;
+  }
+
+  .warning-box {
+    @apply bg-red-950/40 border-l-4 border-accent-red p-4 rounded-r-lg my-4 text-red-100;
+  }
+
+  .success-box {
+    @apply bg-green-950/40 border-l-4 border-accent-green p-4 rounded-r-lg my-4 text-green-100;
+  }
+
+  .formula-block {
+    @apply font-mono text-blue-200 bg-gray-900/80 p-3 rounded-lg text-sm my-3 border border-white/5;
+  }
+
+  .step-card {
+    @apply bg-gray-900/60 border-l-4 border-accent-green p-4 mb-4 rounded-r-lg;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-bold;
+  }
+
+  .data-table {
+    @apply w-full border-collapse text-sm;
+  }
+
+  .data-table th {
+    @apply bg-gray-800 text-gray-200 px-3 py-2.5 text-left font-semibold border border-white/10;
+  }
+
+  .data-table td {
+    @apply bg-gray-900/60 px-3 py-2.5 border border-white/10 text-gray-300;
+  }
+
+  .data-table tr:hover td {
+    @apply bg-white/[0.04];
+  }
+
+  .subtotal-row td {
+    @apply bg-gray-800/80 font-semibold text-white;
+  }
+
+  .receiver-card {
+    @apply bg-gray-900/60 border border-white/10 rounded-xl p-4 flex flex-col gap-2;
+  }
+}

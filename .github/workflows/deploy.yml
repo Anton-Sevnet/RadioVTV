@@ -14,7 +14,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build Bitrix presentation
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Vite app
+        run: npm run build
+
+      - name: Build Bitrix presentation (wrap in PHP prolog)
         run: python .github/scripts/build_presentation.py
 
       - name: Prepare SSH
@@ -28,7 +40,7 @@ jobs:
         run: |
           ssh -i ~/.ssh/alttechno -p 4422 bitrix@at5.su \
             "mkdir -p /home/bitrix/www/local/presentations/power_system_zapolyarye"
-          scp -i ~/.ssh/alttechno -P 4422 deploy/* \
+          scp -i ~/.ssh/alttechno -P 4422 -r deploy/* \
             bitrix@at5.su:/home/bitrix/www/local/presentations/power_system_zapolyarye/
           scp -i ~/.ssh/alttechno -P 4422 www/urlrewrite.php \
             bitrix@at5.su:/home/bitrix/www/urlrewrite.php

@@ -1,1 +1,5 @@
 /deploy/
+/bitrix/
+/dist/
+/node_modules/
+*.tar.gz
