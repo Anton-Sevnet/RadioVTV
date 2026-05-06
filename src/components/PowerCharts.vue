@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, onBeforeUnmount, ref } from 'vue'
 import { Chart, registerables } from 'chart.js'
-import FullscreenBtn from './FullscreenBtn.vue'
+import FullscreenZoomFrame from './FullscreenZoomFrame.vue'
 
 const auditItems = [
   {
@@ -23,8 +23,6 @@ const auditItems = [
 
 Chart.register(...registerables)
 
-const powerRef    = ref(null)
-const heatRef     = ref(null)
 const powerCanvasRef = ref(null)
 const heatCanvasRef  = ref(null)
 
@@ -195,12 +193,11 @@ onBeforeUnmount(() => {
       приоритет «мозгам» <strong class="text-white">до 1 Вт</strong>,
       усилитель класса E (П-контур), короткая L-антенна с водяным заземлением «звезда».
     </p>
-    <div ref="powerRef" class="relative overflow-x-auto bg-white rounded-xl p-4 mb-8 vtv-chart-fs">
-      <FullscreenBtn :target-ref="powerRef" />
+    <FullscreenZoomFrame frame-class="overflow-x-auto bg-white rounded-xl p-4 mb-8 vtv-chart-fs">
       <div class="chart-scroll-inner min-w-[640px]">
         <canvas ref="powerCanvasRef" height="100" />
       </div>
-    </div>
+    </FullscreenZoomFrame>
 
     <h3 class="text-accent-red font-semibold mb-3 text-base">
       Тепловыделение (Терморегуляция ячейки)
@@ -209,12 +206,11 @@ onBeforeUnmount(() => {
       Химическое тепло Q_хим ≈ 1.4·P_бат; электрическое Q_эл = I²R_внутр.
       Снижением эффективности из-за зашламления в пределах 15% пренебрегаем.
     </p>
-    <div ref="heatRef" class="relative overflow-x-auto bg-white rounded-xl p-4 mb-6 vtv-chart-fs">
-      <FullscreenBtn :target-ref="heatRef" />
+    <FullscreenZoomFrame frame-class="overflow-x-auto bg-white rounded-xl p-4 mb-6 vtv-chart-fs">
       <div class="chart-scroll-inner min-w-[640px]">
         <canvas ref="heatCanvasRef" height="100" />
       </div>
-    </div>
+    </FullscreenZoomFrame>
 
     <!-- Audit block -->
     <div class="highlight-box">

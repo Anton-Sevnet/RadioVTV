@@ -108,11 +108,17 @@
 :fullscreen.vtv-svg-fs svg,
 :-webkit-full-screen.vtv-svg-fs svg,
 .vtv-fs.vtv-svg-fs svg {
-  min-width: 0 !important;
-  max-width: 100vw;
+  max-width: min(100vw, 100%);
   max-height: calc(100vh - 1rem);
   width: auto !important;
   height: auto !important;
+}
+
+/* Обёртка зума: не схлопывается в flex fullscreen */
+:fullscreen.vtv-svg-fs .vtv-zoom-surface,
+:-webkit-full-screen.vtv-svg-fs .vtv-zoom-surface,
+.vtv-fs.vtv-svg-fs .vtv-zoom-surface {
+  flex-shrink: 0;
 }
 
 /* Chart.js в fullscreen */
@@ -123,15 +129,21 @@
   align-items: center !important;
   justify-content: center !important;
   background: white !important;
-  overflow: hidden !important;
+  overflow: auto !important;
   padding: 1rem !important;
 }
 
 :fullscreen.vtv-chart-fs .chart-scroll-inner,
 :-webkit-full-screen.vtv-chart-fs .chart-scroll-inner,
 .vtv-fs.vtv-chart-fs .chart-scroll-inner {
-  min-width: 0 !important;
-  width: 100%;
+  min-width: 640px !important;
+  width: max-content;
+}
+
+:fullscreen.vtv-chart-fs .vtv-zoom-surface,
+:-webkit-full-screen.vtv-chart-fs .vtv-zoom-surface,
+.vtv-fs.vtv-chart-fs .vtv-zoom-surface {
+  flex-shrink: 0;
 }
 
 /* Three.js в fullscreen */

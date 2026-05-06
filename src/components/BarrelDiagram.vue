@@ -1,8 +1,5 @@
 <script setup>
-import { ref } from 'vue'
-import FullscreenBtn from './FullscreenBtn.vue'
-
-const containerRef = ref(null)
+import FullscreenZoomFrame from './FullscreenZoomFrame.vue'
 </script>
 
 <template>
@@ -16,8 +13,7 @@ const containerRef = ref(null)
       Для стабильной работы зимой ячейка помещается ниже уровня промерзания почвы или укрывается снегом.
     </p>
 
-    <div ref="containerRef" class="relative overflow-auto rounded-xl border border-white/10 bg-[#1a1a1a] p-2 vtv-svg-fs">
-      <FullscreenBtn :target-ref="containerRef" />
+    <FullscreenZoomFrame frame-class="overflow-auto rounded-xl border border-white/10 bg-[#1a1a1a] p-2 vtv-svg-fs">
       <svg viewBox="0 0 1000 700" class="w-full max-w-full" style="min-width:560px; height:auto;">
         <rect width="1000" height="700" fill="#1a1a1a" />
         <!-- Бочка (Контур) -->
@@ -58,6 +54,6 @@ const containerRef = ref(null)
         <text x="660" y="375" fill="#95a5a6" font-size="12">Не даёт остыть ниже −10°C</text>
         <path d="M 204 680 L 204 650 Q 300 640 400 660 T 596 640 L 596 680 Z" fill="rgba(149, 165, 166, 0.3)" />
       </svg>
-    </div>
+    </FullscreenZoomFrame>
   </section>
 </template>

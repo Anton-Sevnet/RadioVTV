@@ -47,6 +47,11 @@ onMounted(() => {
   controls.enableDamping = true
   controls.dampingFactor = 0.06
   controls.maxPolarAngle = Math.PI / 2 - 0.06
+  controls.enableZoom = true
+  controls.zoomSpeed = 1.15
+  controls.minZoom = 0.35
+  controls.maxZoom = 5
+  canvas.style.touchAction = 'none'
 
   scene.add(new THREE.AmbientLight(0x8899aa, 0.55))
   const sun = new THREE.DirectionalLight(0xffffff, 0.95)
@@ -278,6 +283,7 @@ onBeforeUnmount(() => {
       <strong class="text-white">заполярные сосны</strong> — высокие стволы с маленькой кроной;
       <strong class="text-white">горизонтальное полотно</strong> на высоте ~10 м, изоляторы, натяжение тросами.
       Несущая — <strong class="text-white">1219 кГц</strong>. Вращайте сцену мышью (ЛКМ).
+      В полноэкранном режиме — колёсико мыши или жест «щипок» для масштаба сцены.
     </p>
 
     <!-- Wire selection guide -->
