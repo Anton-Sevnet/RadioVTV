@@ -1,5 +1,10 @@
 <script setup>
+import { ref } from 'vue'
 import { img, PHOTOS } from '../constants/images.js'
+import PhotoGallery from './PhotoGallery.vue'
+
+const galleryIndex = ref(null)
+function openGallery(i) { galleryIndex.value = i }
 </script>
 
 <template>
@@ -9,21 +14,44 @@ import { img, PHOTOS } from '../constants/images.js'
     <div class="absolute top-0 left-1/4 w-96 h-96 bg-accent-green/10 rounded-full blur-3xl pointer-events-none" />
     <div class="absolute top-0 right-1/4 w-96 h-96 bg-accent-blue/10 rounded-full blur-3xl pointer-events-none" />
 
-    <!-- Photo grid -->
-    <div class="grid grid-cols-3 gap-0.5 max-h-72 overflow-hidden opacity-60">
-      <div
-        v-for="photo in PHOTOS"
-        :key="photo.src"
-        class="overflow-hidden"
-      >
-        <img
-          :src="img(photo.src)"
-          :alt="photo.alt"
-          class="w-full h-24 md:h-36 object-cover"
-          loading="lazy"
-        />
+    <!-- Photo grid + Gallery button -->
+    <div class="relative">
+      <div class="grid grid-cols-3 gap-0.5 max-h-72 overflow-hidden opacity-60">
+        <div
+          v-for="(photo, i) in PHOTOS"
+          :key="photo.src"
+          class="overflow-hidden cursor-pointer"
+          @click="openGallery(i)"
+        >
+          <img
+            :src="img(photo.src)"
+            :alt="photo.alt"
+            class="w-full h-24 md:h-36 object-cover transition-opacity hover:opacity-80"
+            loading="lazy"
+          />
+        </div>
       </div>
+
+      <!-- Кнопка Галерея — поверх фото, левый нижний угол -->
+      <button
+        class="absolute bottom-4 left-4 z-20 flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-base text-white shadow-xl
+               bg-gradient-to-r from-blue-700 to-emerald-700 hover:from-blue-600 hover:to-emerald-600
+               ring-1 ring-emerald-400/30 hover:ring-emerald-400/60
+               transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0"
+        @click="openGallery(0)"
+        title="Открыть галерею фотографий"
+      >
+        <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <polyline points="21 15 16 10 5 21"/>
+        </svg>
+        Галерея
+      </button>
     </div>
+
+    <!-- Модальный просмотрщик -->
+    <PhotoGallery v-model="galleryIndex" :images="PHOTOS" />
 
     <!-- Hero content -->
     <div class="relative z-20 max-w-7xl mx-auto px-4 py-10 -mt-16">
