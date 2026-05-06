@@ -19,11 +19,13 @@ import CalibrationTable     from './components/CalibrationTable.vue'
 import ReceiversSection     from './components/ReceiversSection.vue'
 import AudioSection         from './components/AudioSection.vue'
 
-/** Позволяет подставить ключ из GitHub Secret / локального `.env` без правки кода. */
+/** Только из сборки: задайте в GitHub Actions секрет VITE_RECAPTCHA_SITE_KEY (reCAPTCHA v2 «флажок»). */
 const RECAPTCHA_SITE_KEY =
-  typeof import.meta.env.VITE_RECAPTCHA_SITE_KEY === 'string' && import.meta.env.VITE_RECAPTCHA_SITE_KEY.length > 0
-    ? import.meta.env.VITE_RECAPTCHA_SITE_KEY
-    : '6LcE-dssAAAAADXr3BTVYE3EYvfrR5-uGp6wIyaq'
+  typeof import.meta.env.VITE_RECAPTCHA_SITE_KEY === 'string'
+    ? import.meta.env.VITE_RECAPTCHA_SITE_KEY.trim()
+    : ''
+
+const recaptchaEnabled = RECAPTCHA_SITE_KEY.length >= 30
 
 const recaptchaContainer = ref(null)
 const recaptchaShowPanel = ref(true)
@@ -120,6 +122,7 @@ function bootRecaptcha(runId) {
 
 onMounted(() => {
   const runId = `page-${Date.now()}`
+  if (!recaptchaEnabled) return
   void nextTick(() => {
     bootRecaptcha(runId)
   })
@@ -154,15 +157,34 @@ onMounted(() => {
       <div class="flex flex-col items-center gap-6 text-center">
         <TelegramAuthorCta variant="footer" />
 
+        <p
+          v-if="!recaptchaEnabled"
+          class="text-gray-600 text-xs max-w-md leading-relaxed m-0"
+        >
+          Антиспам: включите виджет, добавив в GitHub секрет Actions
+          <span class="text-gray-400"> VITE_RECAPTCHA_SITE_KEY</span>
+          — это Site Key вида «флажок» reCAPTCHA v2, с доменами
+          <span class="text-gray-400">alttechno.ru</span> и при необходимости
+          <span class="text-gray-400">www.alttechno.ru</span>.
+        </p>
+
         <div
-          v-if="recaptchaShowPanel"
+          v-if="recaptchaEnabled && recaptchaShowPanel"
           class="w-full max-w-md rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-5"
         >
           <p class="text-gray-500 text-xs mb-4 m-0 leading-relaxed">
-            Антиспам reCAPTCHA (Google). Если появляется «ошибка ключа», в настройках ключа добавьте домены
-            <span class="text-gray-400">alttechno.ru</span>
-            и при необходимости <span class="text-gray-400">www.alttechno.ru</span>, тип ключа —
-            «Флажок v2». Либо задайте корректный ключ в секрете CI
+            Подключена reCAPTCHA v2 («флажок»): домены вы настраиваете в
+            <a
+              href="https://www.google.com/recaptcha/admin/create"
+              class="text-[#229ED9] underline decoration-[#229ED9]/40 hover:decoration-[#229ED9]"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              консоли Google</a>.
+            Если раньше был «ошибка ключа» — чаще всего ключ не того типа (нужна v2) или в доменах нет
+            <span class="text-gray-400">alttechno.ru</span> /
+            <span class="text-gray-400">www.alttechno.ru</span>.
+            Ключ в сборке задаётся секретом
             <span class="text-gray-400">VITE_RECAPTCHA_SITE_KEY</span>.
           </p>
           <div
