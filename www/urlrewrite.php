@@ -16,13 +16,6 @@ $arUrlRewrite = [
 		'SORT' => 100,
 	],
 	[
-		'CONDITION' => '#^/power-system-zapolyarye-3cells-mno2/?(\\?.*)?$#',
-		'RULE' => '',
-		'ID' => 'presentation-power-system-zapolyarye',
-		'PATH' => '/local/presentations/power_system_zapolyarye/index.php',
-		'SORT' => 100,
-	],
-	[
 		'CONDITION' => '#^/myroomy-uskorenie-bitriks24-dlya-rf/?(\\?.*)?$#',
 		'RULE' => '',
 		'ID' => 'presentation-myroomy-bitrix24-rf',
