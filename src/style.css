@@ -91,62 +91,64 @@
   z-index: 9999 !important;
   border-radius: 0 !important;
   margin: 0 !important;
-  overflow: auto !important;
+  /* overflow управляется дочерним surface через position:absolute;
+     hidden нужен чтобы clamp работал без браузерного скролла */
+  overflow: hidden !important;
 }
 
-/* SVG-схемы в fullscreen */
+/* ── SVG-схемы в fullscreen ──────────────────────────────────── */
+/* Используем position:relative + overflow:hidden; surface = position:absolute;
+   зум через реальное изменение width (не CSS scale) → SVG перерисовывается */
 :fullscreen.vtv-svg-fs,
 :-webkit-full-screen.vtv-svg-fs,
 .vtv-fs.vtv-svg-fs {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
   background: #1a1a1a !important;
-  padding: 0.5rem !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
 }
 
-:fullscreen.vtv-svg-fs svg,
-:-webkit-full-screen.vtv-svg-fs svg,
-.vtv-fs.vtv-svg-fs svg {
-  max-width: min(100vw, 100%);
-  max-height: calc(100vh - 1rem);
-  width: auto !important;
+/* SVG заполняет surface по ширине; height:auto сохраняет пропорции */
+:fullscreen.vtv-svg-fs .vtv-zoom-surface svg,
+:-webkit-full-screen.vtv-svg-fs .vtv-zoom-surface svg,
+.vtv-fs.vtv-svg-fs .vtv-zoom-surface svg {
+  width: 100% !important;
   height: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+  display: block;
 }
 
-/* Обёртка зума: не схлопывается в flex fullscreen */
-:fullscreen.vtv-svg-fs .vtv-zoom-surface,
-:-webkit-full-screen.vtv-svg-fs .vtv-zoom-surface,
-.vtv-fs.vtv-svg-fs .vtv-zoom-surface {
-  flex-shrink: 0;
-}
-
-/* Chart.js в fullscreen */
+/* ── Chart.js в fullscreen ───────────────────────────────────── */
+/* Surface position:absolute заполняет viewport; width меняется по zoom.
+   chart-scroll-inner заполняет surface → Chart.js перерисовывается в нативном разрешении */
 :fullscreen.vtv-chart-fs,
 :-webkit-full-screen.vtv-chart-fs,
 .vtv-fs.vtv-chart-fs {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
   background: white !important;
-  overflow: auto !important;
-  padding: 1rem !important;
-}
-
-:fullscreen.vtv-chart-fs .chart-scroll-inner,
-:-webkit-full-screen.vtv-chart-fs .chart-scroll-inner,
-.vtv-fs.vtv-chart-fs .chart-scroll-inner {
-  min-width: 640px !important;
-  width: max-content;
+  overflow: hidden !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
 }
 
 :fullscreen.vtv-chart-fs .vtv-zoom-surface,
 :-webkit-full-screen.vtv-chart-fs .vtv-zoom-surface,
 .vtv-fs.vtv-chart-fs .vtv-zoom-surface {
-  flex-shrink: 0;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
-/* Three.js в fullscreen */
+/* chart-scroll-inner в fullscreen: заполняет surface, мин-ширина не нужна */
+:fullscreen.vtv-chart-fs .chart-scroll-inner,
+:-webkit-full-screen.vtv-chart-fs .chart-scroll-inner,
+.vtv-fs.vtv-chart-fs .chart-scroll-inner {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+/* ── Three.js в fullscreen ───────────────────────────────────── */
 :fullscreen.vtv-3d-fs,
 :-webkit-full-screen.vtv-3d-fs,
 .vtv-fs.vtv-3d-fs {
