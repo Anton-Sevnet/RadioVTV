@@ -17,9 +17,9 @@ import FullscreenZoomFrame from './FullscreenZoomFrame.vue'
     <FullscreenZoomFrame frame-class="overflow-auto rounded-xl border border-white/10 bg-[#1a1a1a] p-2 vtv-svg-fs">
       <svg viewBox="0 0 1100 750" class="w-full max-w-full" style="min-width:600px; height:auto;">
         <defs>
-          <!-- Стрелки для аннотаций -->
-          <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-            <polygon points="0 0, 10 3, 0 6" fill="#bdc3c7" />
+          <!-- Маркер-точка для инженерных выносок -->
+          <marker id="dot" markerWidth="6" markerHeight="6" refX="3" refY="3">
+            <circle cx="3" cy="3" r="3" fill="#bdc3c7" />
           </marker>
         </defs>
 
@@ -41,7 +41,7 @@ import FullscreenZoomFrame from './FullscreenZoomFrame.vue'
         <rect x="50" y="460" width="300" height="200" fill="rgba(52, 152, 219, 0.15)" stroke="#2980b9" stroke-width="2" rx="10" />
         <path d="M 50 490 Q 125 470 200 490 T 350 490" fill="none" stroke="#3498db" stroke-width="2" />
         <text x="60" y="480" fill="#3498db" font-size="14" font-weight="bold">Незамерзающий водоём</text>
-        <text x="60" y="645" fill="#bdc3c7" font-size="12">Глубина ниже уровня промерзания</text>
+        <text x="60" y="655" fill="#bdc3c7" font-size="12">Глубина ниже уровня промерзания</text>
 
         <!-- Провод заземления (чистая линия) -->
         <path d="M 180 320 L 180 560" fill="none" stroke="#3498db" stroke-width="4" />
@@ -137,52 +137,40 @@ import FullscreenZoomFrame from './FullscreenZoomFrame.vue'
         <path d="M 680 560 L 640 600 M 680 560 L 720 600 M 680 560 L 680 620" fill="none" stroke="#2ecc71" stroke-width="2" />
 
         <!-- ═════════════════════════════════════════════════════════════════════════ -->
-        <!-- АННОТАЦИИ СО СТРЕЛОЧКАМИ (справа и снизу) -->
+        <!-- АННОТАЦИИ (Прямое размещение и инженерные выноски) -->
         <!-- ═════════════════════════════════════════════════════════════════════════ -->
 
-        <!-- Аннотация: Батарей -->
-        <line x1="160" y1="325" x2="210" y2="325" stroke="#bdc3c7" stroke-width="1" marker-end="url(#arrowhead)" />
-        <text x="220" y="330" fill="#bdc3c7" font-size="11" font-weight="bold">BAT+ (Силовой)</text>
+        <!-- Питание (над/под линиями) -->
+        <text x="160" y="272" fill="#e74c3c" font-size="12" font-weight="bold">BAT+ (Силовой)</text>
+        <text x="160" y="338" fill="#3498db" font-size="12" font-weight="bold">GND- (Силовой)</text>
 
-        <line x1="160" y1="345" x2="210" y2="345" stroke="#bdc3c7" stroke-width="1" marker-end="url(#arrowhead)" />
-        <text x="220" y="350" fill="#bdc3c7" font-size="11" font-weight="bold">GND- (Силовой)</text>
+        <!-- Логика и Сигналы (над линиями) -->
+        <text x="490" y="112" fill="#e67e22" font-size="12" font-weight="bold" text-anchor="middle">+5V (Питание логики)</text>
+        <text x="550" y="192" fill="#2ecc71" font-size="11" font-weight="bold" text-anchor="middle">Audio (DAC_R)</text>
+        <text x="725" y="207" fill="#f1c40f" font-size="11" font-weight="bold" text-anchor="middle">PWM (D9) → 1219 кГц</text>
 
-        <!-- Аннотация: Толстый спуск -->
-        <line x1="180" y1="400" x2="220" y2="420" stroke="#bdc3c7" stroke-width="1" marker-end="url(#arrowhead)" />
-        <text x="225" y="425" fill="#bdc3c7" font-size="11" font-weight="bold">Толстый спуск</text>
-        <text x="225" y="438" fill="#bdc3c7" font-size="11" font-weight="bold">медной плетёнки</text>
+        <!-- Выноска: Толстый спуск -->
+        <line x1="180" y1="435" x2="200" y2="435" stroke="#bdc3c7" stroke-width="1" marker-start="url(#dot)" />
+        <text x="205" y="439" fill="#3498db" font-size="12" font-weight="bold">Толстый спуск (GND)</text>
 
-        <!-- Аннотация: Консервная банка -->
-        <line x1="195" y1="560" x2="250" y2="560" stroke="#bdc3c7" stroke-width="1" marker-end="url(#arrowhead)" />
-        <text x="255" y="565" fill="#f1c40f" font-size="11" font-weight="bold">Консервная банка</text>
-        <text x="255" y="578" fill="#bdc3c7" font-size="10">(Центр звезды, пайка)</text>
+        <!-- Выноска: Консервная банка -->
+        <line x1="195" y1="560" x2="230" y2="560" stroke="#bdc3c7" stroke-width="1" marker-start="url(#dot)" />
+        <text x="235" y="556" fill="#f1c40f" font-size="11" font-weight="bold">Консервная банка</text>
+        <text x="235" y="570" fill="#bdc3c7" font-size="10">(Центр звезды, пайка)</text>
 
-        <!-- Аннотация: Медная плетёнка -->
-        <line x1="150" y1="570" x2="110" y2="610" stroke="#bdc3c7" stroke-width="1" marker-end="url(#arrowhead)" />
-        <text x="20" y="625" fill="#e67e22" font-size="11" font-weight="bold">8 лучей медной плетёнки</text>
-        <text x="20" y="638" fill="#bdc3c7" font-size="10">(Топология «Звезда»)</text>
+        <!-- Выноска: 8 лучей -->
+        <line x1="230" y1="605" x2="250" y2="620" stroke="#bdc3c7" stroke-width="1" marker-start="url(#dot)" />
+        <text x="255" y="625" fill="#e67e22" font-size="11" font-weight="bold">8 лучей медной плетёнки</text>
+        <text x="255" y="640" fill="#bdc3c7" font-size="10">(Топология «Звезда»)</text>
 
-        <!-- Аннотация: +5V питание логики -->
-        <line x1="400" y1="120" x2="400" y2="80" stroke="#bdc3c7" stroke-width="1" marker-end="url(#arrowhead)" />
-        <text x="300" y="65" fill="#e67e22" font-size="11" font-weight="bold">+5V (Питание логики)</text>
+        <!-- Выноска: ВЧ меандр -->
+        <line x1="938" y1="315" x2="955" y2="315" stroke="#bdc3c7" stroke-width="1" marker-start="url(#dot)" />
+        <text x="960" y="311" fill="#e74c3c" font-size="12" font-weight="bold">ВЧ меандр →</text>
+        <text x="960" y="326" fill="#e74c3c" font-size="12" font-weight="bold">LC-ФНЧ (1219 кГц)</text>
 
-        <!-- Аннотация: Audio DAC_R -->
-        <line x1="550" y1="200" x2="550" y2="160" stroke="#bdc3c7" stroke-width="1" marker-end="url(#arrowhead)" />
-        <text x="480" y="145" fill="#2ecc71" font-size="11" font-weight="bold">Audio (DAC_R)</text>
-
-        <!-- Аннотация: PWM управление -->
-        <line x1="720" y1="215" x2="685" y2="240" stroke="#bdc3c7" stroke-width="1" marker-end="url(#arrowhead)" />
-        <text x="600" y="260" fill="#f1c40f" font-size="11" font-weight="bold">PWM (D9) → 1219 кГц</text>
-
-        <!-- Аннотация: ВЧ меандр -->
-        <line x1="900" y1="320" x2="950" y2="350" stroke="#bdc3c7" stroke-width="1" marker-end="url(#arrowhead)" />
-        <text x="960" y="355" fill="#e74c3c" font-size="11" font-weight="bold">ВЧ меандр →</text>
-        <text x="960" y="368" fill="#e74c3c" font-size="11" font-weight="bold">LC-ФНЧ (1219 кГц)</text>
-
-        <!-- Аннотация: Антенна -->
-        <line x1="680" y1="580" x2="650" y2="650" stroke="#bdc3c7" stroke-width="1" marker-end="url(#arrowhead)" />
-        <text x="520" y="670" fill="#2ecc71" font-size="11" font-weight="bold">В Антенну («Длинный луч»)</text>
-        <text x="520" y="683" fill="#bdc3c7" font-size="10">Чистая синусоида (АМ)</text>
+        <!-- Антенна (под символом) -->
+        <text x="680" y="645" fill="#2ecc71" font-size="12" font-weight="bold" text-anchor="middle">В Антенну («Длинный луч»)</text>
+        <text x="680" y="660" fill="#bdc3c7" font-size="11" text-anchor="middle">Чистая синусоида (АМ)</text>
 
       </svg>
     </FullscreenZoomFrame>
