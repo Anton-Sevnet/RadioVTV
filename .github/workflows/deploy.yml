@@ -30,3 +30,5 @@ jobs:
             "mkdir -p /home/bitrix/www/local/presentations/power_system_zapolyarye"
           scp -i ~/.ssh/alttechno -P 4422 deploy/* \
             bitrix@at5.su:/home/bitrix/www/local/presentations/power_system_zapolyarye/
+          scp -i ~/.ssh/alttechno -P 4422 www/urlrewrite.php \
+            bitrix@at5.su:/home/bitrix/www/urlrewrite.php
