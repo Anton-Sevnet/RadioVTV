@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дыхание ВТВ — 1219 кГц (СВ) | Динамическая магниевая радиостанция (3 ячейки) — Передатчик и заземление</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #121212;
+        }
+        header {
+            background-color: #1e272e;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+        }
+        h1, h2, h3, h4 { color: #ffffff; }
+        header h1 { color: #fff; margin: 0; }
+        .section {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+            border: 1px solid #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td { border: 1px solid #444; }
+        th, td { padding: 12px; text-align: left; }
+        th { background-color: #2c2c2c; color: #e0e0e0; }
+        td { background-color: #1e1e1e; }
+        .highlight {
+            background-color: #263238;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+            color: #cfd8dc;
+            border-radius: 4px;
+        }
+        .warning {
+            background-color: #3e2723;
+            border-left: 4px solid #e74c3c;
+            padding: 15px;
+            margin: 15px 0;
+            color: #ffccbc;
+            border-radius: 4px;
+        }
+        .svg-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            background-color: #1a1a1a;
+            padding: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #444;
+            margin: 20px 0;
+        }
+        .manual-step {
+            background-color: #2a2a2a;
+            border-left: 4px solid #2ecc71;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        .manual-step h4 {
+            margin-top: 0;
+            color: #2ecc71;
+        }
+        .antenna-iso-wrap {
+            position: relative;
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #444;
+            background: linear-gradient(180deg, #1a2332 0%, #0d1117 100%);
+            margin: 20px 0;
+        }
+        .antenna-iso-wrap canvas {
+            display: block;
+            width: 100%;
+            height: min(420px, 70vh);
+        }
+        .antenna-iso-legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+            font-size: 0.92em;
+        }
+        .antenna-iso-legend span {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+        .intro-callout {
+            background: linear-gradient(135deg, rgba(41, 128, 185, 0.22), rgba(46, 204, 113, 0.12));
+            border-left: 4px solid #2ecc71;
+            padding: 14px 16px;
+            border-radius: 6px;
+            color: #ecf0f1;
+        }
+        .polar-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin: 16px 0;
+        }
+        .polar-gallery figure {
+            margin: 0;
+            max-width: 400px;
+            color: #bdc3c7;
+            font-size: 0.88em;
+        }
+        .polar-gallery img {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Радиостанция «Дыхание ВТВ» <span style="display:inline-block; margin-left:8px; padding:4px 12px; background:#2980b9; border-radius:6px; font-size:0.75em; font-weight:700; vertical-align:middle;">1219 кГц · СВ · вещание</span></h1>
+        <p class="intro-callout" style="font-size: 1.1em; line-height: 1.6;"><strong>Цель проекта:</strong> запустить в эфир «Дыхание ВТВ» — настоящую пиратскую радиостанцию в диких местах Заполярья. Наша миссия — создать полностью автономную, энергонезависимую установку, которая годами будет транслировать живой плейлист без единой рекламной вставки и повторов. Энергию мы возьмём у самой природы: от земли и полярных вод. Проект ищет смелых энтузиастов, инженеров-романтиков и всех, кому откликается идея живого голоса, звучащего сквозь северные озёра, ветер и долгую полярную ночь. Присоединяйтесь, чтобы оставить свой след в эфире Заполярья!</p>
+        <div class="polar-gallery" aria-label="Заполярные озёра и северное сияние">
+            <figure>
+                <img src="aurora1.jpg" alt="Цветное северное сияние над спокойной водой и горами">
+                <figcaption>Многоцветное сияние: магия полярной ночи.</figcaption>
+            </figure>
+            <figure>
+                <img src="lake_aerial.jpg" alt="Озера Заполярья летом с высоты птичьего полета">
+                <figcaption>Бескрайние озёра: летний взгляд с высоты на наши «батареи».</figcaption>
+            </figure>
+        </div>
+        <p>Практическое руководство по динамической магниевой установке: модульная электроника «без паяльной паранойи», прозрачная заливка силиконом и высокоэффективное водяное заземление «Звезда». Целевая несущая в эфире — <strong>1219 кГц</strong> (средние волны).</p>
+    </header>
+
+    <div class="section" style="border-left: 4px solid #3498db;">
+        <h2>1. Философия: "Практичность вместо микроамперов"</h2>
+        <p>Химическая батарея (3 бочки ПНД) стабильно генерирует <strong>8–20 Вт мощности</strong>. Мы выделяем на питание "мозгов" <strong>до 1 Ватта</strong> (что с запасом перекрывает любые нужды), а всю остальную энергию направляем в антенну через высокоэффективный MOSFET-ключ (Class-E). Это позволяет собрать передатчик из готовых, дешевых модулей с маркетплейсов, с минимальным использованием паяльника.</p>
+    </div>
+
+    <div class="section">
+        <h2>2. Рост эффективности за счет Диоксида Марганца (Пиролюзита)</h2>
+        <p>По данным форумов энтузиастов-выживальщиков и химическим исследованиям земляных батарей, обычный графитовый катод быстро подвергается <strong>газовой поляризации</strong> (покрывается пузырьками водорода), что увеличивает внутреннее сопротивление и роняет ток.</p>
+        <p>Добавление "куклы" с диоксидом марганца (MnO₂) решает эту проблему кардинально:</p>
+        <ul>
+            <li><strong>Химическое сжигание водорода:</strong> MnO₂ выступает деполяризатором, окисляя выделяющийся водород до воды.</li>
+            <li><strong>Увеличение токоотдачи:</strong> Эффективность ячейки вырастает в <strong>3-5 раз</strong> по сравнению с голым графитом. Ток больше не проседает под нагрузкой.</li>
+            <li><strong>Кулоновская эффективность:</strong> Достигает 80-90%. Химическая энергия магния расходуется на полезный ток, а не на паразитные побочные реакции.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>3. Подземное размещение и Приоритет Питания</h2>
+        <p>Жесткое ограничение в "минимальные 2 Вт" исключено. Бочки будут <strong>закопаны под землю</strong>, а зимой дополнительно укрыты снегом. Это гарантирует, что температура внутри даже в лютые морозы не опустится ниже -10°C. Вся вырабатываемая мощность строго распределяется по приоритетам.</p>
+        
+        <div class="highlight">
+            <h3>Железобетонный приоритет: Мозги -> Антенна:</h3>
+            <p>Нам необходимо, чтобы сначала стабильно питалась схема генерации сигнала, а всё усиление сигнала шло по остаточному принципу.</p>
+            <ul>
+                <li><strong>Приоритет №1 (Генерация):</strong> Вся мощность первоочередно направляется на DC-DC преобразователь (MT3608). Он обеспечивает 5В для питания Arduino и DFPlayer (устройства воспроизведения и генерации радиочастоты).</li>
+                <li><strong>Режим ожидания (Сон):</strong> Если химическая реакция замедляется (например, из-за сильного мороза) и мощности недостаточно для выдачи требуемого тока на 5В, DC-DC преобразователь отключается или проседает. Arduino и плеер просто «засыпают» и ждут, пока пойдет достаточная мощность для их стабильного запуска.</li>
+                <li><strong>Приоритет №2 (Излучатель):</strong> Как только "мозгам" хватает энергии, <strong>всё, что есть сверху</strong>, уходит в силовой ключ (MOSFET) и отправляется в антенну. Никакого сброса мощности в тепло — вся лишняя энергия без остатка летит в эфир!</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>4. Конструкторская схема: Бочка с "Куклой"</h2>
+        <p>Для стабильной работы зимой ячейка помещается ниже уровня промерзания почвы или укрывается снегом.</p>
+
+        <div class="svg-container">
+            <svg viewBox="0 0 1000 700" width="100%" height="500">
+                <rect width="1000" height="700" fill="#1a1a1a" />
+                
+                <!-- Бочка (Контур) -->
+                <path d="M 200 100 L 200 650 C 200 670 220 680 250 680 L 550 680 C 580 680 600 670 600 650 L 600 100" fill="none" stroke="#607d8b" stroke-width="8" />
+                <path d="M 180 100 L 620 100 L 620 80 L 180 80 Z" fill="#455a64" />
+                <text x="210" y="60" fill="#b0bec5" font-size="16" font-weight="bold">Бочка ПНД 65л (Под землей)</text>
+                
+                <!-- Электролит -->
+                <rect x="204" y="190" width="392" height="486" fill="rgba(52, 152, 219, 0.2)" />
+                <path d="M 204 190 Q 300 200 400 190 T 596 190" fill="none" stroke="#3498db" stroke-width="2" />
+
+                <!-- Масляный затвор -->
+                <rect x="204" y="150" width="392" height="40" fill="rgba(241, 196, 15, 0.4)" />
+                <path d="M 204 150 Q 300 160 400 150 T 596 150" fill="none" stroke="#f1c40f" stroke-width="2" />
+
+                <!-- КАТОДНАЯ КУКЛА (Мешок + Пиролюзит + Графит) -->
+                <rect x="235" y="170" width="160" height="350" fill="rgba(127, 140, 141, 0.8)" stroke="#bdc3c7" stroke-width="2" stroke-dasharray="4" rx="10" />
+                <rect x="240" y="175" width="150" height="340" fill="#34495e" />
+                <circle cx="260" cy="200" r="1.5" fill="#2c3e50"/><circle cx="280" cy="450" r="1.5" fill="#2c3e50"/><circle cx="360" cy="250" r="1.5" fill="#2c3e50"/>
+                <rect x="265" y="170" width="100" height="350" fill="#212121" stroke="#111" stroke-width="2" />
+                
+                <text x="320" y="340" fill="#9e9e9e" font-size="16" font-weight="bold" transform="rotate(-90 320 340)">ГРАФИТ</text>
+                
+                <!-- Контакт графита -->
+                <rect x="310" y="130" width="10" height="40" fill="#90a4ae" />
+                <circle cx="315" cy="140" r="8" fill="#ff7043" />
+
+                <!-- Магниевый анод (ПМ-5У) -->
+                <rect x="440" y="190" width="90" height="400" fill="#cfd8dc" stroke="#90a4ae" stroke-width="3" />
+                <rect x="480" y="150" width="10" height="40" fill="#78909c" />
+                <text x="495" y="400" fill="#455a64" font-size="18" font-weight="bold" transform="rotate(-90 495 400)">АНОД Mg</text>
+                <circle cx="485" cy="170" r="8" fill="#ff7043" />
+
+                <!-- Провода -->
+                <path d="M 315 140 Q 315 100 150 100" fill="none" stroke="#e74c3c" stroke-width="5" />
+                <path d="M 485 170 Q 485 80 150 80" fill="none" stroke="#3498db" stroke-width="5" />
+                <text x="70" y="105" fill="#e74c3c" font-size="18" font-weight="bold">ПЛЮС (+)</text>
+                <text x="60" y="85" fill="#3498db" font-size="18" font-weight="bold">МИНУС (-)</text>
+
+                <!-- Выноски -->
+                <line x1="395" y1="280" x2="650" y2="280" stroke="#fff" stroke-dasharray="4" />
+                <text x="660" y="275" fill="#2ecc71" font-size="16" font-weight="bold">Слой Пиролюзита (MnO₂)</text>
+                <text x="660" y="295" fill="#95a5a6" font-size="12">Устраняет водородную пленку,</text>
+                <text x="660" y="310" fill="#95a5a6" font-size="12">повышает отдачу тока в 3-5 раз</text>
+
+                <line x1="530" y1="360" x2="650" y2="360" stroke="#fff" stroke-dasharray="4" />
+                <text x="660" y="355" fill="#ecf0f1" font-size="16" font-weight="bold">Термоизоляция (Земля/Снег)</text>
+                <text x="660" y="375" fill="#95a5a6" font-size="12">Не дает остыть ниже -10°C</text>
+
+                <path d="M 204 680 L 204 650 Q 300 640 400 660 T 596 640 L 596 680 Z" fill="rgba(149, 165, 166, 0.3)" />
+            </svg>
+        </div>
+    </div>
+
+    <div class="section" style="border-left: 4px solid #e74c3c;">
+        <h2>5. Дополнение: Химические реакции и "Зашламление"</h2>
+        <p>Для понимания того, откуда берется энергия, ниже приведены процессы, происходящие внутри 3-х бочек с магний-графитовыми ячейками (с деполяризатором MnO₂).</p>
+        
+        <div style="display: flex; gap: 20px; margin: 20px 0;">
+            <div style="flex: 1; background: #273746; padding: 20px; border-radius: 8px;">
+                <h3 style="margin-top: 0; color: #e74c3c;">🔋 Химия процесса</h3>
+                <p><strong>1. На аноде (Растворение магния):</strong><br>
+                <code style="color: #aed6f1; background: #111; padding: 2px 6px; border-radius: 4px;">Mg → Mg²⁺ + 2e⁻</code></p>
+                <p><strong>2. На катоде (Восстановление воды):</strong><br>
+                <code style="color: #aed6f1; background: #111; padding: 2px 6px; border-radius: 4px;">2H₂O + 2e⁻ → H₂ + 2OH⁻</code></p>
+                <p><strong>3. Деполяризация (внутри куклы):</strong><br>
+                Пиролюзит (MnO₂) окисляет газообразный водород, не давая ему изолировать графит:<br>
+                <code style="color: #aed6f1; background: #111; padding: 2px 6px; border-radius: 4px;">H₂ + 2MnO₂ → 2MnO(OH)</code></p>
+                <p style="border-top: 1px solid #444; padding-top: 10px;"><strong>Итоговая реакция:</strong><br>
+                <code style="color: #2ecc71; background: #111; padding: 2px 6px; border-radius: 4px;">Mg + 2H₂O + 2MnO₂ → Mg(OH)₂↓ + 2MnO(OH)↓ + Тепло (Q)</code></p>
+            </div>
+            
+            <div style="flex: 1; background: #3e2723; padding: 20px; border-radius: 8px;">
+                <h3 style="margin-top: 0; color: #e67e22;">⚠️ Проблема "Зашламления" (14 месяцев)</h3>
+                <p>Продукты реакции — гидроксид магния <code>Mg(OH)₂</code> (белый осадок) и манганит <code>MnO(OH)</code> — нерастворимы.</p>
+                <p>Поскольку реакция деполяризации происходит прямо в мешочке "куклы", поры пиролюзита и сама ткань <strong>постепенно забиваются (зашламляются)</strong> этими твердыми осадками.</p>
+                <p>Именно поэтому система требует <strong>обслуживания не реже 1 раза в 14 месяцев</strong>: нужно извлекать куклы, механически счищать шлам и менять мешки с засыпкой.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>6. Графики мощности и тепловыделения</h2>
+        <p>Модель работы передатчика по месяцам на основе климатических данных аэропорта Мурманск (Мурмаши). Учтено, что бочки закопаны под слой мха (20 см) и зимнего снега (до 2 м), поэтому реальная температура вокруг ячеек программно ограничена: не ниже -10°C зимой и не выше +15°C летом. Расчёт дальности и П-контура привязан к несущей <strong>1219 кГц</strong> (СВ).</p>
+        
+        <h3 style="color: #3498db;">Выдаваемая в эфир мощность и дальность</h3>
+        <p>Модель мощности и дальности <strong>пересчитана</strong> с учётом: трёх ячеек с деполяризатором MnO₂, диапазона выработки <strong>8–20 Вт</strong>, приоритета «мозгам» <strong>до 1 Вт</strong> (Arduino Nano + DFPlayer через MT3608), усилителя класса E (П-контур после MOSFET), и <strong>короткой антенны</strong> типа L с водяным заземлением (эффективность излучения введена коэффициентом). На графике три оценки дальности: <strong>открытая местность</strong> (земная волна без сильного рельефа), <strong>лесисто-холмистая</strong> (дополнительное ослабление), <strong>средняя</strong> между ними. Подробности и ссылки — в блоке ниже.</p>
+        <div class="chart-container" style="background-color: #ffffff; padding: 15px; border-radius: 8px; margin: 20px 0;">
+            <canvas id="powerChart" height="100"></canvas>
+        </div>
+
+        <h3 style="color: #e74c3c;">Тепловыделение (Терморегуляция ячейки)</h3>
+        <p>Расчёт внутреннего подогрева ячеек при обновлённой модели <strong>P<sub>бат</sub> = 8…20 Вт</strong> по месяцам (см. аудит ниже). Химическое тепловыделение от экзотермической реакции окисления магния и деполяризации. Электрическое тепловыделение — по току и изменяющемуся сопротивлению электролита. <i>(Снижением эффективности из-за постепенного зашламления пиролюзита в пределах 15% пренебрегаем).</i></p>
+        <div class="chart-container" style="background-color: #ffffff; padding: 15px; border-radius: 8px; margin: 20px 0;">
+            <canvas id="heatChart" height="100"></canvas>
+        </div>
+
+        <div class="highlight" style="background-color: #273746; border-left-color: #e74c3c; margin-top: 30px;">
+            <h4 style="margin-top: 0; color: #e74c3c;">🌡️ Теплообмен: Не закипит ли бочка летом?</h4>
+            <p>Суммарное тепловыделение одной 65-литровой бочки на пике активности может достигать <strong>30-35 Вт</strong>. Может ли она перегреться в летнем грунте (при +10...+15°C)? <strong>Нет, установится идеальный температурный баланс.</strong></p>
+            <ul>
+                <li><strong>Плотность теплового потока:</strong> Площадь поверхности 65-литровой бочки составляет ~1 м². Тепловой поток равен всего 35 Вт/м² (для сравнения, тело сидящего человека излучает около 55 Вт/м²).</li>
+                <li><strong>Теплопроводность стенки:</strong> Пластик ПНД толщиной 3 мм создает перепад температур всего в ~0.3°C. Он практически не препятствует отводу тепла.</li>
+                <li><strong>Рассеивание во влажный грунт:</strong> Влажный водянистый грунт (суглинок, мокрый торф) имеет высокую теплопроводность (λ = 1.0 – 1.5 Вт/(м·°C)). По закону рассеивания тепла от цилиндрического тела в массив, температурный напор (ΔT) составит от 7.5°C до 11°C.</li>
+            </ul>
+            <p style="margin-bottom: 0;"><strong>Итог:</strong> Если летом грунт вокруг бочки прогрет до +10°C, равновесная температура внутри бочки за счет саморазогрева составит <strong>+17.5 ... +21 °C</strong>. Это фантастическое совпадение — вы получаете идеальную "комнатную" температуру электролита прямо под землей, при которой ионная подвижность и токоотдача максимальны, а риск теплового разгона полностью исключен.</p>
+        </div>
+
+        <div class="highlight" style="background-color: #1a2332; border-left-color: #2ecc71; margin-top: 24px;">
+            <h3 style="margin-top: 0; color: #2ecc71;">Аудит схемы и полный пересчёт (мощность, дальность)</h3>
+            <p><strong>Исходные допущения (согласованы с разделами 1, 3, 8 и сметой):</strong> три гальванические ячейки в бочках ПНД; электроника — MT3608 (5 В для логики), Arduino Nano, DFPlayer Mini, модуль MOSFET (LR7843/D4184), П-контур 100 мкГн + 2×1000 пФ (подстраивается под резонанс); несущая вещания <strong>1219 кГц</strong> (~1,219 МГц, СВ); антенна — горизонтальное полотно с коротким спуском и <strong>водяным заземлением «звезда»</strong>.</p>
+
+            <h4 style="color: #3498db; margin-bottom: 8px;">1. Мощность батареи по месяцам</h4>
+            <p>Температура у ячейки <em>T</em> (°C) ограничена интервалом [−10…+15] (мох/снег). Полная электрическая мощность трёх ячеек моделируется <strong>линейно</strong> от холодного минимума к тёплому максимуму:</p>
+            <p style="font-family: Consolas, monospace; background: #111; padding: 10px; border-radius: 6px; color: #aed6f1;">P<sub>бат</sub> = 8 + (T + 10) · (12/25) &nbsp;→&nbsp; при T = −10 °C: 8 Вт; при T = +15 °C: 20 Вт.</p>
+            <p>Так зафиксирован диапазон <strong>8–20 Вт</strong>, согласованный с текстом про «8–20 Вт» и пиролюзит (без отдельного множителя зашламления в графике — как и в примечании к теплу).</p>
+
+            <h4 style="color: #3498db; margin-bottom: 8px;">2. Распределение: логика и передатчик</h4>
+            <p>После приоритета DC-DC на «мозги» выделяется <strong>P<sub>лог</sub> = 1 Вт</strong> (верхняя оценка для Arduino + DFPlayer при 5 В; светодиоды сняты по руководству). Если P<sub>бат</sub> &lt; <strong>P<sub>сон</sub> ≈ 2 Вт</strong>, преобразователь не выходит на режим — передатчик и график эфира: 0. В модели климата Мурманска при ограничении T ≥ −10 °C <strong>нижняя граница P<sub>бат</sub> = 8 Вт</strong>, режим «сон» на графике не возникает.</p>
+            <p>Мощность на входе П-контура (после ключа класса E) с КПД усилителя <strong>η<sub>PA</sub> = 0,9</strong> (заявлено в руководстве для класса E):</p>
+            <p style="font-family: Consolas, monospace; background: #111; padding: 10px; border-radius: 6px; color: #aed6f1;">P<sub>нос</sub> = max(0, P<sub>бат</sub> − P<sub>лог</sub>) · η<sub>PA</sub>.</p>
+
+            <h4 style="color: #3498db; margin-bottom: 8px;">3. Эквивалентная излучаемая мощность (короткая антенна СВ)</h4>
+            <p>Для низкой вертикали/полотна на <em>f</em> = <strong>1219 кГц</strong> излучающее сопротивление мало, преобладают потери; вводится <strong>совокупный коэффициент передачи в эфир</strong> η<sub>ант</sub> = 0,22 (22%): учёт несогласованных потерь, ПуГВ, короткой L-антенны и хорошего, но не идеального заземления. Тогда эквивалентная мощность для оценки дальности:</p>
+            <p style="font-family: Consolas, monospace; background: #111; padding: 10px; border-radius: 6px; color: #aed6f1;">P<sub>экв</sub> = P<sub>нос</sub> · η<sub>ант</sub>.</p>
+            <p>Точное поле и дальность дают программы по <a href="https://www.itu.int/rec/R-REC-P.368/" target="_blank" rel="noopener">ITU-R P.368</a> (наземная волна); здесь используется <strong>упрощённая степенная модель</strong>, калибруемая по порядку величины с P<sub>экв</sub>:</p>
+            <p style="font-family: Consolas, monospace; background: #111; padding: 10px; border-radius: 6px; color: #aed6f1;">D<sub>откр</sub> = k · √(P<sub>экв</sub>), &nbsp; k = 25 км/√Вт.</p>
+            <p><strong>Открытая местность</strong> (ровная почва, проводимость порядка 10<sup>−2</sup>–10<sup>−1</sup> С/м, без выраженных экранов) — D<sub>откр</sub>.</p>
+            <p><strong>Лесисто-холмистая местность:</strong> вводится множитель ослабления рельефом и растительностью <strong>α = 0,38</strong> (эквивалентно дополнительным ~8–10 дБ потерь по трассе в среднем; см. обобщённые потери в лесу в <a href="https://www.itu.int/rec/R-REC-P.833/" target="_blank" rel="noopener">ITU-R P.833</a> для помех и среды; для грубой оценки дальности множитель согласован с полевой практикой СВ).</p>
+            <p style="font-family: Consolas, monospace; background: #111; padding: 10px; border-radius: 6px; color: #aed6f1;">D<sub>лес/холмы</sub> = α · D<sub>откр</sub>.</p>
+            <p><strong>Средняя оценка</strong> (между «лучшим» и «худшим» сценарием):</p>
+            <p style="font-family: Consolas, monospace; background: #111; padding: 10px; border-radius: 6px; color: #aed6f1;">D<sub>ср</sub> = (D<sub>откр</sub> + D<sub>лес/холмы</sub>) / 2.</p>
+            <p><em>Примечание:</em> для СВ «прямая видимость» в буквальном смысле (как для UHF) не применима; подпись на графике «открытая местность» соответствует <strong>наземной волне</strong> без сильного экранирования рельефом. Ночной эфирный слой (skywave) в модель не включён — оценка консервативна для связи по земле.</p>
+
+            <h4 style="color: #3498db; margin-bottom: 8px;">4. Тепловая часть графика</h4>
+            <p>Без изменения структуры: химическое тепло Q<sub>хим</sub> ≈ 1,4·P<sub>бат</sub>; электрическое Q<sub>эл</sub> = I²R<sub>внутр</sub>, I = P<sub>бат</sub>/U, U = 3,6 В, R<sub>внутр</sub>(T) как в коде графика. Сумма Q<sub>хим</sub> + Q<sub>эл</sub> — кривые на нижнем графике.</p>
+
+            <h4 style="color: #bdc3c7; margin-bottom: 4px;">Справочные материалы</h4>
+            <ul style="margin-bottom: 0; font-size: 0.95em;">
+                <li>ITU-R P.368 — расчёт интенсивности поля наземной волны.</li>
+                <li>ITU-R P.833 — влияние растительности (для качественного учёта потерь в лесу).</li>
+                <li>Kraus, Marhefka, <em>Antennas for All Applications</em> — излучение коротких антенн, согласование.</li>
+                <li>Руководство по проекту: класс E, П-контур, несущая <strong>1219 кГц</strong> — см. раздел 8 настоящего документа.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>7. Блок-схема и Принцип Соединения (Модульный подход)</h2>
+        <p>Вся электроника размещается в пластиковом контейнере и заливается прозрачным силиконовым компаундом для 100% защиты от влаги. Для максимизации отдачи в эфир добавлено подводное заземление топологии "Звезда" из медной плетенки.</p>
+        
+        <div class="svg-container">
+            <svg viewBox="0 0 1000 650" width="100%" height="480">
+                <rect width="1000" height="650" fill="#1a1a1a" />
+                <text x="500" y="32" fill="#f1c40f" font-size="17" font-weight="bold" text-anchor="middle">Несущая вещания: 1219 кГц (СВ)</text>
+                
+                <!-- Питание от бочек -->
+                <rect x="50" y="250" width="100" height="100" fill="#34495e" stroke="#7f8c8d" stroke-width="3" rx="8" />
+                <text x="60" y="295" fill="#ecf0f1" font-size="14" font-weight="bold">3 х Бочки</text>
+                <text x="65" y="315" fill="#f1c40f" font-size="14" font-weight="bold">2.5V - 4.5V</text>
+                
+                <!-- Шина питания -->
+                <path d="M 150 280 L 800 280" fill="none" stroke="#e74c3c" stroke-width="4" /> <!-- PLUS -->
+                <path d="M 150 320 L 800 320" fill="none" stroke="#3498db" stroke-width="4" /> <!-- MINUS -->
+                <text x="160" y="270" fill="#e74c3c" font-size="12" font-weight="bold">BAT+ (Силовой)</text>
+                <text x="160" y="340" fill="#3498db" font-size="12" font-weight="bold">GND- (Силовой)</text>
+
+                <!-- ВОДЯНОЕ ЗАЗЕМЛЕНИЕ (Топология "Звезда") -->
+                <rect x="50" y="420" width="300" height="200" fill="rgba(52, 152, 219, 0.15)" stroke="#2980b9" stroke-width="2" rx="10" />
+                <path d="M 50 450 Q 125 430 200 450 T 350 450" fill="none" stroke="#3498db" stroke-width="2" />
+                <text x="60" y="440" fill="#3498db" font-size="14" font-weight="bold">Незамерзающий водоем</text>
+                <text x="60" y="605" fill="#bdc3c7" font-size="12">Глубина ниже уровня промерзания</text>
+
+                <!-- Провод заземления -->
+                <path d="M 180 320 L 180 520" fill="none" stroke="#3498db" stroke-width="4" />
+                <text x="190" y="380" fill="#3498db" font-size="12" font-weight="bold">Толстый спуск (GND)</text>
+
+                <!-- Консервная банка (Центр звезды) -->
+                <ellipse cx="180" cy="520" rx="15" ry="8" fill="#95a5a6" stroke="#f1c40f" stroke-width="2" />
+                <path d="M 165 520 L 165 535 A 15 8 0 0 0 195 535 L 195 520" fill="#7f8c8d" stroke="#f1c40f" stroke-width="2" />
+                <text x="210" y="525" fill="#f1c40f" font-size="12" font-weight="bold">Консервная банка</text>
+                <text x="210" y="540" fill="#e67e22" font-size="11">(Пайка свинцом)</text>
+
+                <!-- 8 лучей из плетенки -->
+                <!-- Горизонтальные -->
+                <path d="M 180 530 L 110 530" fill="none" stroke="#e67e22" stroke-width="3" stroke-dasharray="4 2" />
+                <path d="M 180 530 L 250 530" fill="none" stroke="#e67e22" stroke-width="3" stroke-dasharray="4 2" />
+                <!-- Вертикальный вниз -->
+                <path d="M 180 530 L 180 580" fill="none" stroke="#e67e22" stroke-width="3" stroke-dasharray="4 2" />
+                <!-- Диагонали вниз -->
+                <path d="M 180 530 L 130 565" fill="none" stroke="#e67e22" stroke-width="3" stroke-dasharray="4 2" />
+                <path d="M 180 530 L 230 565" fill="none" stroke="#e67e22" stroke-width="3" stroke-dasharray="4 2" />
+                <!-- Диагонали вверх -->
+                <path d="M 180 530 L 140 495" fill="none" stroke="#e67e22" stroke-width="3" stroke-dasharray="4 2" />
+                <path d="M 180 530 L 220 495" fill="none" stroke="#e67e22" stroke-width="3" stroke-dasharray="4 2" />
+                
+                <text x="70" y="545" fill="#e67e22" font-size="12" font-weight="bold">8 лучей</text>
+                <text x="70" y="560" fill="#e67e22" font-size="11">Медная</text>
+                <text x="70" y="575" fill="#e67e22" font-size="11">плетенка</text>
+
+
+                <!-- Блок 1: DC-DC MT3608 -->
+                <rect x="250" y="100" width="120" height="80" fill="#2c3e50" stroke="#f39c12" stroke-width="2" rx="4" />
+                <text x="260" y="130" fill="#f39c12" font-size="14" font-weight="bold">DC-DC MT3608</text>
+                <text x="270" y="150" fill="#bdc3c7" font-size="12">Вход: 2.5-4.5V</text>
+                <text x="270" y="165" fill="#bdc3c7" font-size="12">Выход: 5.0V</text>
+                <!-- Провода к MT3608 -->
+                <path d="M 280 280 L 280 180" fill="none" stroke="#e74c3c" stroke-width="2" />
+                <path d="M 320 320 L 320 180" fill="none" stroke="#3498db" stroke-width="2" />
+                <circle cx="280" cy="280" r="4" fill="#e74c3c" />
+                <circle cx="320" cy="320" r="4" fill="#3498db" />
+
+                <!-- Шина 5V -->
+                <path d="M 370 120 L 600 120" fill="none" stroke="#e67e22" stroke-width="3" />
+                <text x="400" y="110" fill="#e67e22" font-size="12" font-weight="bold">+5V (Питание логики)</text>
+
+                <!-- Блок 2: DFPlayer Mini -->
+                <rect x="420" y="150" width="100" height="90" fill="#2c3e50" stroke="#9b59b6" stroke-width="2" rx="4" />
+                <text x="430" y="180" fill="#9b59b6" font-size="14" font-weight="bold">DFPlayer Mini</text>
+                <text x="445" y="205" fill="#bdc3c7" font-size="12">MicroSD</text>
+                <text x="445" y="225" fill="#bdc3c7" font-size="12">MP3 / WAV</text>
+                <!-- Питание DFPlayer -->
+                <path d="M 450 120 L 450 150" fill="none" stroke="#e67e22" stroke-width="2" />
+                <path d="M 480 320 L 480 240" fill="none" stroke="#3498db" stroke-width="2" />
+                <circle cx="450" cy="120" r="4" fill="#e67e22" />
+                <circle cx="480" cy="320" r="4" fill="#3498db" />
+
+                <!-- Блок 3: Arduino Nano -->
+                <rect x="580" y="150" width="120" height="90" fill="#2c3e50" stroke="#1abc9c" stroke-width="2" rx="4" />
+                <text x="595" y="180" fill="#1abc9c" font-size="14" font-weight="bold">Arduino Nano</text>
+                <text x="590" y="205" fill="#bdc3c7" font-size="12">(Без светодиодов)</text>
+                <text x="610" y="225" fill="#bdc3c7" font-size="12">Генератор ШИМ</text>
+                <!-- Питание Arduino -->
+                <path d="M 600 120 L 600 150" fill="none" stroke="#e67e22" stroke-width="2" />
+                <path d="M 640 320 L 640 240" fill="none" stroke="#3498db" stroke-width="2" />
+                <circle cx="600" cy="120" r="4" fill="#e67e22" />
+                <circle cx="640" cy="320" r="4" fill="#3498db" />
+
+                <!-- Аудио сигнал -->
+                <path d="M 520 190 L 580 190" fill="none" stroke="#2ecc71" stroke-width="2" stroke-dasharray="4" />
+                <text x="525" y="180" fill="#2ecc71" font-size="10">Audio (DAC_R)</text>
+
+                <!-- Блок 4: MOSFET Модуль -->
+                <rect x="750" y="160" width="100" height="80" fill="#2c3e50" stroke="#e74c3c" stroke-width="2" rx="4" />
+                <text x="760" y="185" fill="#e74c3c" font-size="14" font-weight="bold">MOSFET Ключ</text>
+                <text x="760" y="205" fill="#bdc3c7" font-size="12">(LR7843 / D4184)</text>
+                <text x="770" y="225" fill="#bdc3c7" font-size="12">Logic Level</text>
+                <!-- Питание MOSFET (Силовое напрямую от батареи!) -->
+                <path d="M 780 280 L 780 240" fill="none" stroke="#e74c3c" stroke-width="3" />
+                <path d="M 800 320 L 800 240" fill="none" stroke="#3498db" stroke-width="3" />
+                <circle cx="780" cy="280" r="5" fill="#e74c3c" />
+                <circle cx="800" cy="320" r="5" fill="#3498db" />
+                <!-- Управление от Arduino -->
+                <path d="M 700 200 L 750 200" fill="none" stroke="#f1c40f" stroke-width="2" />
+                <text x="710" y="195" fill="#f1c40f" font-size="10">PWM (D9) → 1219 кГц</text>
+
+                <!-- Блок 5: П-Контур (Фильтр) -->
+                <rect x="730" y="380" width="140" height="90" fill="#34495e" stroke="#2ecc71" stroke-width="2" rx="4" />
+                <text x="740" y="405" fill="#2ecc71" font-size="14" font-weight="bold">LC-Фильтр (ФНЧ)</text>
+                <!-- Схема фильтра внутри -->
+                <path d="M 740 440 L 760 440" fill="none" stroke="#fff" stroke-width="2" />
+                <path d="M 760 440 Q 770 420 780 440 T 800 440 T 820 440 T 840 440 L 860 440" fill="none" stroke="#f1c40f" stroke-width="3" />
+                <line x1="760" y1="440" x2="760" y2="460" stroke="#fff" stroke-width="2" />
+                <line x1="750" y1="460" x2="770" y2="460" stroke="#fff" stroke-width="2" />
+                <line x1="750" y1="465" x2="770" y2="465" stroke="#fff" stroke-width="2" />
+                <line x1="840" y1="440" x2="840" y2="460" stroke="#fff" stroke-width="2" />
+                <line x1="830" y1="460" x2="850" y2="460" stroke="#fff" stroke-width="2" />
+                <line x1="830" y1="465" x2="850" y2="465" stroke="#fff" stroke-width="2" />
+                <path d="M 760 465 L 760 480 L 840 480 L 840 465" fill="none" stroke="#3498db" stroke-width="2" />
+                
+                <!-- Подключение фильтра к ключу -->
+                <path d="M 850 200 L 920 200 L 920 440 L 870 440" fill="none" stroke="#e74c3c" stroke-width="3" />
+                <text x="860" y="190" fill="#e74c3c" font-size="12" font-weight="bold">ВЧ (меандр) → П-контур → 1219 кГц</text>
+                <!-- Земля фильтра -->
+                <path d="M 800 480 L 800 320" fill="none" stroke="#3498db" stroke-width="3" />
+                <circle cx="800" cy="320" r="5" fill="#3498db" />
+
+                <!-- Антенна -->
+                <path d="M 730 440 L 680 440 L 680 520" fill="none" stroke="#2ecc71" stroke-width="3" />
+                <path d="M 680 520 L 640 560 M 680 520 L 720 560 M 680 520 L 680 580" fill="none" stroke="#2ecc71" stroke-width="2" />
+                <text x="520" y="550" fill="#2ecc71" font-size="14" font-weight="bold">В Антенну ("Длинный луч")</text>
+                <text x="520" y="570" fill="#bdc3c7" font-size="12">Чистая синусоида (АМ)</text>
+
+            </svg>
+        </div>
+    </div>
+
+    <div class="section" style="border-left: 4px solid #2ecc71;">
+        <h2>8. Практическое руководство: Сборка шаг за шагом</h2>
+
+        <div class="manual-step">
+            <h4>Шаг 1: Подготовка модулей (Откусываем лишнее)</h4>
+            <p>Берем <strong>Arduino Nano</strong>. На плате есть два мелких SMD светодиода: <code>PWR</code> (красный, питание) и <code>L</code> (зеленый, встроен в пин 13). Они нам под землей не нужны, а электричество жрут. Берем тонкие кусачки или паяльник и просто <strong>скалываем их с платы</strong>. Так же поступаем со светодиодом на модуле <strong>DFPlayer Mini</strong>.</p>
+        </div>
+
+        <div class="manual-step">
+            <h4>Шаг 2: Подключение питания и Логики</h4>
+            <ul>
+                <li>Подключите <strong>MT3608</strong> к бочкам (IN+ и IN-). Покрутите латунный винтик на синем квадратике (потенциометре) плоской отверткой, пока мультиметр на выходе (OUT+ и OUT-) не покажет ровно <strong>5.0 Вольт</strong>.</li>
+                <li>От выходов OUT+ и OUT- киньте провода на пины <code>5V</code> и <code>GND</code> платы Arduino Nano, и на пины <code>VCC</code> и <code>GND</code> плеера DFPlayer Mini.</li>
+            </ul>
+        </div>
+
+        <div class="manual-step">
+            <h4>Шаг 3: Аудио-линия</h4>
+            <p><strong>НЕ ПОДКЛЮЧАЙТЕ ДИНАМИК</strong> к DFPlayer (пины SPK+/SPK-)! Встроенный усилитель сожжет наш лимит энергии.</p>
+            <p>Берем провод и соединяем пин <strong>DAC_R</strong> (или DAC_L) на плеере с пином <strong>A0</strong> (Аналоговый вход 0) на Arduino. Это чистый, слаботочный линейный аудиосигнал.</p>
+        </div>
+
+        <div class="manual-step">
+            <h4>Шаг 4: Силовой ключ (MOSFET)</h4>
+            <p>Этот модуль работает как молниеносная кнопка. Берем готовый модуль MOSFET (D4184 или LR7843).</p>
+            <ul>
+                <li>Пин <code>PWM</code> (или SIG) соединяем с пином <strong>D9</strong> на Arduino (оттуда пойдёт несущая <strong>1219 кГц</strong> — в прошивке задаётся таймером/ШИМ на этой частоте, ≈1,219 МГц).</li>
+                <li>Толстым проводом соединяем клеммы <code>VIN</code> и <code>GND</code> модуля <strong>НАПРЯМУЮ</strong> с клеммами ваших бочек (минуя DC-DC преобразователь!).</li>
+                <li>К клеммам <code>VOUT+</code> и <code>VOUT-</code> модуля мы подключим наш сглаживающий фильтр.</li>
+            </ul>
+        </div>
+
+        <div class="manual-step">
+            <h4>Шаг 5: Фильтр Нижних Частот (П-Контур) - Единственная пайка</h4>
+            <p>Сигнал с ключа — это квадратные "рубленые" импульсы, их нельзя пускать в антенну (заглушите всю округу помехами). Нам нужна синусоида.</p>
+            <p>Покупаем в "Чип и Дип" готовую выводную индуктивность (катушку) на <strong>100 мкГн (микроГенри) с током не менее 1-2 Ампер</strong>. Например: <em>DR74-101-R</em> или любую бочкообразную на гантельке.</p>
+            <p>Покупаем два пленочных или керамических конденсатора на <strong>1000 пФ (пикоФарад) / 50V+</strong>.</p>
+            <p><strong>Частота:</strong> П-контур подбирается под резонанс на <strong>1219 кГц</strong> (номиналы 100 мкГн + 2×1000 пФ — стартовая точка; при расхождении с генератором — точечный подбор L или C).</p>
+            <p><strong>Схема спайки:</strong></p>
+            <ol>
+                <li>Один конец катушки припаиваем к <code>VOUT+</code> MOSFET модуля. К этому же месту припаиваем одну ножку первого конденсатора.</li>
+                <li>Второй конец катушки — это <strong>выход в Антенну</strong>. К нему припаиваем одну ножку второго конденсатора.</li>
+                <li>Свободные ножки ОБОИХ конденсаторов скручиваем вместе и припаиваем к <code>VOUT-</code> (или Силовой Земле).</li>
+            </ol>
+            <p><em>Всё! Вы собрали эффективный АМ-передатчик Класса Е с КПД >90%.</em></p>
+        </div>
+
+        <div class="manual-step" style="border-color: #3498db;">
+            <h4 style="color: #3498db;">Шаг 6: Водяное заземление (Топология "Звезда")</h4>
+            <p>Без идеального заземления СВ-антенна работать не будет. Нам нужно опустить противовес на глубину водоема, где вода никогда не промерзает.</p>
+            <ul>
+                <li>Берем обычную луженую <strong>консервную банку</strong> (она будет выступать центральным хабом).</li>
+                <li>Покупаем <strong>медную плетенку для снятия припоя</strong> (шириной 2.5 - 3.5 мм). За счет сплетения тысяч тонких жилок у нее гигантская площадь поверхности, а скин-эффект на СВ-диапазоне работает именно по поверхности. Это идеальный ВЧ-противовес.</li>
+                <li>Нарезаем плетенку на <strong>8 лучей длиной по 1.5 - 2 метра каждый</strong>.</li>
+                <li>Зачищаем концы и припаиваем все 8 лучей к дну/стенкам консервной банки, образуя "звезду". <strong>Важно:</strong> Паять нужно чистым свинцом или припоем с высоким содержанием свинца. Свинец в воде покрывается оксидной пленкой, но не гниет гальванически так быстро, как другие металлы.</li>
+                <li>К этой же банке намертво припаиваем толстый спускающийся кабель (GND), идущий от нашего передатчика (от клеммы <code>VOUT-</code>).</li>
+                <li>Бросаем всю эту "звезду" на дно водоема и расправляем лучи в разные стороны (можно придавить камнями на концах). Ил вокруг лучей создаст идеальное "зеркало" для радиосигнала.</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="section" style="border-left: 4px solid #27ae60;">
+        <h2>8.1 Размещение антенны на соснах (схема в изометрии)</h2>
+        <p>Ниже — наглядная модель: <strong>водоём</strong> только с <strong>заземлением «звезда»</strong> на дне; три <strong>бочки ПНД</strong> (ячейки) стоят <strong>на суше</strong>, под землёй у кромки леса; <strong>заполярные сосны</strong> — высокие стволы с маленькой кроной; <strong>горизонтальное полотно</strong> на высоте кроны (~10 м), <strong>изоляторы</strong>, <strong>натяжение</strong> тросами и противовесами, <strong>спуск</strong> и <strong>коаксиал</strong> к передатчику. Несущая в эфире — <strong>1219 кГц</strong> (согласование полотна с П-контуром — см. раздел 8). Вращайте сцену мышью (ЛКМ).</p>
+
+        <div class="highlight">
+            <h3 style="margin-top: 0;">Какой провод купить в строительном / на базе электрики</h3>
+            <p><strong>Оптимально для полотна антенны:</strong> одножильный или многожильный <strong>медный</strong> провод в ПВХ-изоляции марки <strong>ПуГВ</strong> сечением <strong>4–6 мм²</strong> (на длинных линиях лучше <strong>6 мм²</strong> — меньше потерь и механический запас). Ищите в отделе кабеля/провода: бухты 50–100 м, цвет изоляции любой.</p>
+            <p><strong>Альтернатива:</strong> гибкий силовой <strong>КГ</strong> или <strong>КГтп-ХЛ</strong> (если есть в продаже) тем же сечением — устойчивее к перегибам на морозе; дороже ПуГВ.</p>
+            <p><strong>Не подойдёт:</strong> алюминиевая <strong>СИП</strong> для воздушных линий (скрутки, хрупкость), тонкий сигнальный/«слаботочный» провод без сечения для силовых линий.</p>
+        </div>
+
+        <div class="antenna-iso-wrap">
+            <canvas id="antenna-iso-canvas" aria-label="Схема размещения антенны на соснах в изометрии"></canvas>
+        </div>
+
+        <div class="antenna-iso-legend">
+            <div><span style="background:#2ecc71;"></span>Зелёный — полотно антенны (медь ПуГВ)</div>
+            <div><span style="background:#ecf0f1;"></span>Светлые — керамические изоляторы (ИТО)</div>
+            <div><span style="background:#f1c40f;"></span>Жёлтый — трос / канат натяжения к противовесу</div>
+            <div><span style="background:#e67e22;"></span>Оранжевый — коаксиальный фидер к передатчику</div>
+            <div><span style="background:#2980b9;"></span>Синий — водоём (заземление «звезда» на дне)</div>
+            <div><span style="background:#34495e;"></span>Тёмные цилиндры — бочки ПНД 65 л (ячейки под землёй)</div>
+        </div>
+
+        <div class="manual-step" style="border-color: #27ae60;">
+            <h4 style="color: #27ae60;">Порядок натяжки (кратко)</h4>
+            <ol>
+                <li>На двух крайних соснах закрепить <strong>столбовые крепления</strong> (хомуты с шайбой под кору + абразивная лента) и <strong>блоки (полиспасты)</strong> — через них пускается трос к <strong>противовесу</strong> на земле (бетонный блок, мешок с камнем, банка с песком).</li>
+                <li>Полотно <strong>ПуГВ</strong> кладут на <strong>изоляторы</strong> (орешки ИТО), не прижимая голой жилой к коре: зазор к влажной коре уменьшает утечки ВЧ.</li>
+                <li>К точке питания (один из изоляторов у «центральной» опоры) подводят <strong>спуск ПуГВ</strong> вниз и при необходимости горизонтальную трассу <strong>коаксиалом 30 м</strong> (экран — на общую землю с передатчиком, центральная жила — к горячей точке после согласования; точная схема зависит от вашего П-контура).</li>
+                <li>Натягивать <strong>постепенно</strong>: сначала лёгкое натяжение, выдержать сутки — дерево «садится», затем подтянуть противовес.</li>
+            </ol>
+        </div>
+
+        <p style="font-size: 0.9em; color: #95a5a6; margin-bottom: 0;"><em>Графика: Three.js (CDN). Если сцена не появилась, откройте страницу в браузере с поддержкой WebGL и ES-модулей.</em></p>
+    </div>
+
+    <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    const canvas = document.getElementById('antenna-iso-canvas');
+    if (canvas) {
+        const wrap = canvas.parentElement;
+        const W = Math.max(wrap ? wrap.clientWidth : 800, 320);
+        const H = Math.min(420, window.innerHeight * 0.65);
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0d1117);
+
+        const aspect = W / H;
+        const frustumSize = 38;
+        const camera = new THREE.OrthographicCamera(
+            frustumSize * aspect / -2, frustumSize * aspect / 2,
+            frustumSize / 2, frustumSize / -2,
+            0.5, 280
+        );
+        camera.position.set(44, 38, 46);
+        camera.lookAt(0, 4, 2);
+
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(W, H, false);
+        renderer.shadowMap.enabled = true;
+
+        const controls = new OrbitControls(camera, canvas);
+        controls.target.set(0, 4, 2);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.06;
+        controls.maxPolarAngle = Math.PI / 2 - 0.06;
+
+        scene.add(new THREE.AmbientLight(0x8899aa, 0.55));
+        const sun = new THREE.DirectionalLight(0xffffff, 0.95);
+        sun.position.set(22, 44, 18);
+        sun.castShadow = true;
+        scene.add(sun);
+
+        const groundGeo = new THREE.PlaneGeometry(90, 90);
+        const groundMat = new THREE.MeshLambertMaterial({ color: 0x243d32 });
+        const ground = new THREE.Mesh(groundGeo, groundMat);
+        ground.rotation.x = -Math.PI / 2;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        const waterGroup = new THREE.Group();
+        const waterGeo = new THREE.CircleGeometry(14, 48);
+        const waterMat = new THREE.MeshLambertMaterial({
+            color: 0x1a5276,
+            emissive: 0x0a2540,
+            transparent: true,
+            opacity: 0.92
+        });
+        const water = new THREE.Mesh(waterGeo, waterMat);
+        water.rotation.x = -Math.PI / 2;
+        water.position.set(4, 0.04, 22);
+        water.scale.set(1.2, 1, 0.85);
+        water.receiveShadow = true;
+        waterGroup.add(water);
+        const shore = new THREE.Mesh(
+            new THREE.RingGeometry(13.8, 15.2, 48),
+            new THREE.MeshLambertMaterial({ color: 0x3d5c4a, transparent: true, opacity: 0.9 })
+        );
+        shore.rotation.x = -Math.PI / 2;
+        shore.position.set(4, 0.03, 22);
+        shore.scale.set(1.2, 1, 0.85);
+        waterGroup.add(shore);
+        scene.add(waterGroup);
+
+        const starHub = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.35, 0.4, 0.12, 12),
+            new THREE.MeshLambertMaterial({ color: 0xb7950b })
+        );
+        starHub.rotation.x = Math.PI / 2;
+        starHub.position.set(4, 0.08, 22);
+        scene.add(starHub);
+        for (let i = 0; i < 8; i++) {
+            const ang = (i / 8) * Math.PI * 2;
+            const ray = new THREE.Mesh(
+                new THREE.BoxGeometry(3.2, 0.04, 0.12),
+                new THREE.MeshLambertMaterial({ color: 0xc9a227 })
+            );
+            ray.position.set(4 + Math.cos(ang) * 1.6, 0.07, 22 + Math.sin(ang) * 1.6);
+            ray.rotation.y = -ang;
+            scene.add(ray);
+        }
+
+        function barrel(x, z) {
+            const g = new THREE.Group();
+            const body = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.72, 0.78, 2.0, 20),
+                new THREE.MeshLambertMaterial({ color: 0x2c3e50 })
+            );
+            body.position.y = -0.35;
+            body.castShadow = true;
+            g.add(body);
+            const rim = new THREE.Mesh(
+                new THREE.TorusGeometry(0.78, 0.06, 8, 24),
+                new THREE.MeshLambertMaterial({ color: 0x1a252f })
+            );
+            rim.rotation.x = Math.PI / 2;
+            rim.position.y = 0.55;
+            g.add(rim);
+            g.position.set(x, 0, z);
+            scene.add(g);
+            return g;
+        }
+        barrel(-5, -4);
+        barrel(0, -5);
+        barrel(5, -4);
+
+        function arcticPine(x, z, scale = 1) {
+            const g = new THREE.Group();
+            const h = 9.2 * scale;
+            const trunk = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.22 * scale, 0.42 * scale, h, 10),
+                new THREE.MeshLambertMaterial({ color: 0x6d5c4d })
+            );
+            trunk.position.y = h / 2;
+            trunk.castShadow = true;
+            g.add(trunk);
+            const barkMat = new THREE.MeshLambertMaterial({ color: 0x4a3f35 });
+            for (let i = 0; i < 8; i++) {
+                const ang = (i / 8) * Math.PI * 2 + (x + z) * 0.1;
+                const up = 0.35 + (i % 3) * 0.22;
+                const br = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.05 * scale, 0.03 * scale, 1.8 * scale, 5),
+                    barkMat
+                );
+                br.position.set(Math.cos(ang) * 0.32 * scale, h * up, Math.sin(ang) * 0.32 * scale);
+                br.rotation.z = Math.PI / 2.5;
+                br.rotation.y = ang;
+                g.add(br);
+            }
+            const crownMat = new THREE.MeshLambertMaterial({ color: 0x3d5c45 });
+            const crown = new THREE.Mesh(new THREE.SphereGeometry(1.05 * scale, 10, 8), crownMat);
+            crown.position.y = h + 0.45 * scale;
+            crown.scale.set(1.1, 0.5, 1.05);
+            crown.castShadow = true;
+            g.add(crown);
+            const top = new THREE.Mesh(
+                new THREE.SphereGeometry(0.45 * scale, 8, 6),
+                new THREE.MeshLambertMaterial({ color: 0x4a6748 })
+            );
+            top.position.y = h + 0.95 * scale;
+            g.add(top);
+            g.position.set(x, 0, z);
+            scene.add(g);
+            return g;
+        }
+
+        const treePos = [
+            [-18, -8],
+            [-4, 12],
+            [20, 0],
+            [12, -16]
+        ];
+        treePos.forEach(([tx, tz], i) => {
+            arcticPine(tx, tz, 0.92 + (i % 3) * 0.04);
+        });
+
+        const yWire = 10.05;
+        const pts = [
+            new THREE.Vector3(-18, yWire, -8),
+            new THREE.Vector3(-4, yWire, 12),
+            new THREE.Vector3(20, yWire, 0),
+            new THREE.Vector3(12, yWire, -16)
+        ];
+
+        const wireCurve = new THREE.CatmullRomCurve3(pts, false, 'catmullrom', 0.35);
+        const wireGeo = new THREE.TubeGeometry(wireCurve, 64, 0.06, 8, false);
+        scene.add(new THREE.Mesh(
+            wireGeo,
+            new THREE.MeshLambertMaterial({ color: 0x2ecc71, emissive: 0x0a3d22 })
+        ));
+
+        const insMat = new THREE.MeshLambertMaterial({ color: 0xecf0f1 });
+        pts.forEach((p) => {
+            const ins = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.2, 0.5, 8), insMat);
+            ins.position.copy(p);
+            scene.add(ins);
+        });
+
+        const feedIdx = 1;
+        const feed = pts[feedIdx].clone();
+        const dropEnd = new THREE.Vector3(feed.x, 0.45, feed.z);
+        const dropCurve = new THREE.LineCurve3(feed, dropEnd);
+        scene.add(new THREE.Mesh(
+            new THREE.TubeGeometry(dropCurve, 12, 0.05, 6, false),
+            new THREE.MeshLambertMaterial({ color: 0x27ae60 })
+        ));
+
+        const coaxEnd = new THREE.Vector3(feed.x - 2, 0.35, feed.z + 5);
+        const coaxCurve = new THREE.CatmullRomCurve3([
+            dropEnd.clone(),
+            new THREE.Vector3(feed.x - 0.5, 0.4, feed.z + 1.5),
+            coaxEnd
+        ], false, 'catmullrom', 0.4);
+        scene.add(new THREE.Mesh(
+            new THREE.TubeGeometry(coaxCurve, 32, 0.09, 8, false),
+            new THREE.MeshLambertMaterial({ color: 0xe67e22 })
+        ));
+
+        function rope(from, to, color) {
+            scene.add(new THREE.Mesh(
+                new THREE.TubeGeometry(new THREE.LineCurve3(from, to), 4, 0.04, 6, false),
+                new THREE.MeshLambertMaterial({ color })
+            ));
+        }
+        rope(
+            new THREE.Vector3(-18, 2.8, -8),
+            new THREE.Vector3(-23, 0.35, -12),
+            0xf1c40f
+        );
+        rope(
+            new THREE.Vector3(20, 2.8, 0),
+            new THREE.Vector3(25, 0.35, 4),
+            0xf1c40f
+        );
+
+        const weightGeo = new THREE.BoxGeometry(1.2, 0.6, 1.6);
+        const weightMat = new THREE.MeshLambertMaterial({ color: 0x7f8c8d });
+        const w1 = new THREE.Mesh(weightGeo, weightMat);
+        w1.position.set(-23, 0.35, -12);
+        w1.castShadow = true;
+        scene.add(w1);
+        const w2 = new THREE.Mesh(weightGeo, weightMat);
+        w2.position.set(25, 0.35, 4);
+        w2.castShadow = true;
+        scene.add(w2);
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            const nw = Math.max(canvas.parentElement ? canvas.parentElement.clientWidth : 800, 320);
+            const nh = Math.min(420, window.innerHeight * 0.65);
+            const a = nw / nh;
+            camera.left = frustumSize * a / -2;
+            camera.right = frustumSize * a / 2;
+            camera.top = frustumSize / 2;
+            camera.bottom = frustumSize / -2;
+            camera.updateProjectionMatrix();
+            renderer.setSize(nw, nh, false);
+        });
+    }
+    </script>
+
+    <div class="section" style="border-left: 4px solid #f39c12;">
+        <h2>9. Корпус: Прозрачная заливка компаундом</h2>
+        <p>Под землей (особенно рядом с водяным заземлением) 100% влажность. Любой лак или коробка IP68 рано или поздно пустит конденсат, и плата сгниет.</p>
+        <p><strong>Решение:</strong> Монолитная заливка, как в блоках управления стиральными машинами. Мы используем прозрачный заливочный силикон, чтобы всегда видеть состояние паек, плюс силикон мягкий и не оторвет детали при морозе (в отличие от эпоксидки).</p>
+
+        <div class="highlight">
+            <h3>Процесс заливки:</h3>
+            <ol>
+                <li>Покупаем <strong>Силиконовый компаунд прозрачный ПК-68 или Гермоизол ПЗСК</strong> (двухкомпонентный, продается на Ozon, ВсеИнструменты или в спецмагазинах радиодеталей).</li>
+                <li>Берем обычный пластиковый пищевой контейнер по размеру вашей спаянной гирлянды из модулей.</li>
+                <li>Сверлим в боковой стенке дырки, продеваем провода (Питание от бочек, Провод на Антенну, Провод Заземления). Щели залепляем пластилином или термоклеем снаружи.</li>
+                <li>Укладываем платы на дно (можно капнуть термоклеем, чтобы не всплыли).</li>
+                <li>Смешиваем компаунд по инструкции и заливаем контейнер до краев. Оставляем на 24 часа.</li>
+                <li><strong>Важно:</strong> Слот для MicroSD карты на DFPlayer должен быть либо выведен за пределы силикона (чтобы менять флешку), либо заливается намертво "раз и навсегда" с флешкой на 128 ГБ внутри. Если заливаете намертво — заклейте щель слота малярным скотчем перед заливкой, чтобы силикон не протек внутрь контактов карты!</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>10. Смета: Готовые модули и электроника</h2>
+        <p>Все модули максимально популярны, продаются везде (Ozon, Wildberries, AliExpress, Чип и Дип).</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Наименование детали</th>
+                    <th>Кол-во</th>
+                    <th>Цена (руб)</th>
+                    <th>Где купить / Назначение</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="4" style="background-color: #1e272e; color: #3498db; text-align: center; font-weight: bold;">Химическая часть (Гальванические ячейки)</td>
+                </tr>
+                <tr>
+                    <td><strong>Тара: Бочка ПНД 65л (с хомутом)</strong></td>
+                    <td>4 шт. (3 + 1 запасная)</td>
+                    <td>~ 5 000 – 7 000 ₽</td>
+                    <td><a href="https://sankt-peterburg.agropak.net/catalog/plastikovye-bochki/bochki-65-litrov/" target="_blank">Агропак (СПб) / Ozon</a></td>
+                </tr>
+                <tr>
+                    <td><strong>Аноды: Магниевый протектор ПМ-5У</strong></td>
+                    <td>3 шт.</td>
+                    <td>~ 9 500 – 16 000 ₽</td>
+                    <td><a href="https://mrklimat.ru/gazoballonnoe-oborudovanie/oborudovanie-dlya-gazgoldera/protektory-magnievye/protektor-pm-5u.html" target="_blank">Мистер Климат (СПб) / Газовые магазины</a></td>
+                </tr>
+                <tr>
+                    <td><strong>Катоды: Электрод ЭГ Ø150 мм (L=1000 мм)</strong></td>
+                    <td>1 шт. (на распил)</td>
+                    <td>~ 15 000 – 20 000 ₽</td>
+                    <td><a href="https://spb.snabtechmet.ru/product/elektrody_eg25_100_mm_grafitovye_grafitirovannye/" target="_blank">Снабтехмет (СПб) / Металлобазы</a></td>
+                </tr>
+                <tr>
+                    <td><strong>Деполяризатор: Диоксид марганца (Пиролюзит)</strong></td>
+                    <td>10 кг</td>
+                    <td>~ 2 500 – 3 500 ₽</td>
+                    <td><a href="https://ap9.ru/filtruyuschie-sredy-i-reagenty/pirolyuzit-dvuokis-margantsa/" target="_blank">Аквапрофиль / Химреактивы (150-350 ₽/кг)</a></td>
+                </tr>
+                <tr>
+                    <td><strong>Электролит: Хлорид кальция (CaCl₂) тех.</strong></td>
+                    <td>1 мешок (25 кг)</td>
+                    <td>~ 1 200 – 1 800 ₽</td>
+                    <td><a href="https://www.csdb.ru/shop/himicheskie-reaktivy/kalcij/kalcij-hloristyj/103148/" target="_blank">Химические решения (СПб) / Ozon</a></td>
+                </tr>
+                <tr>
+                    <td><strong>Изоляция: Трансформаторное масло ГК</strong></td>
+                    <td>1 канистра (5-10 л)</td>
+                    <td>~ 1 500 – 2 500 ₽</td>
+                    <td><a href="https://q-sm.ru/product/transformatornoe-maslo-gk-kanistra-10-l/" target="_blank">Кварта-СМ / Автомагазины</a></td>
+                </tr>
+                <tr style="background-color: #2c3e50;">
+                    <td colspan="2" style="text-align:right; font-weight:bold; color:#ecf0f1;">Подытог (Химическая часть):</td>
+                    <td colspan="2" style="font-weight:bold; color:#ecf0f1;">~ 34 700 — 50 800 ₽</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="background-color: #1e272e; color: #2ecc71; text-align: center; font-weight: bold;">Антенная и Фидерная часть (СВ-диапазон)</td>
+                </tr>
+                <tr>
+                    <td><strong>Провод ПуГВ 4.0 или 6.0</strong> (медь многожильная)</td>
+                    <td>100 м (бухта)</td>
+                    <td>~ 6 500 – 8 500 ₽</td>
+                    <td>Полотно антенны "Длинный луч" (ВсеИнструменты / ЭТМ). <strong>Идеал для строймага:</strong> <strong>ПуГВ 6 мм²</strong> медь, ПВХ; альтернатива — <strong>КГ</strong> 4×6 мм².</td>
+                </tr>
+                <tr>
+                    <td><strong>Провод ПуГВ 6.0</strong> (на снижение к земле)</td>
+                    <td>30 м</td>
+                    <td>~ 2 000 – 2 500 ₽</td>
+                    <td>Спуск от антенны до передатчика</td>
+                </tr>
+                <tr>
+                    <td><strong>Коаксиальный кабель</strong> (RG-58, 50 Ом, или аналог для СВ)</td>
+                    <td>30 м</td>
+                    <td>~ 1 500 – 3 500 ₽</td>
+                    <td>Подвод к точке подключения антенны / к гермобоксу у опоры (стройбазы, радиорынок, кабельные отделы)</td>
+                </tr>
+                <tr>
+                    <td><strong>Кабель ВВГнг-LS 1x16 (или ПуГВ 10.0)</strong></td>
+                    <td>50 м</td>
+                    <td>~ 5 000 – 7 000 ₽</td>
+                    <td>Трасса заземления (30м) от передатчика к воде + "Веер" лучей (ВсеИнструменты)</td>
+                </tr>
+                <tr>
+                    <td><strong>Изоляторы орешковые (ИТО-20 или ИТО-40)</strong></td>
+                    <td>4 – 6 шт.</td>
+                    <td>~ 300 – 500 ₽</td>
+                    <td>Изоляция полотна антенны от деревьев (Ozon / Радиорынок)</td>
+                </tr>
+                <tr>
+                    <td><strong>Блок-ролики металлические + Тросы</strong></td>
+                    <td>1 комплект</td>
+                    <td>~ 2 500 – 3 000 ₽</td>
+                    <td>Трос оцинкованный Ø3–4 мм для натяжения (строительный / такелажный отдел)</td>
+                </tr>
+                <tr>
+                    <td><strong>Блоки такелажные (полиспасты) оцинкованные</strong></td>
+                    <td>2 – 4 шт.</td>
+                    <td>~ 800 – 2 000 ₽</td>
+                    <td>Ролики для натяжения полотна и тросов без перекусывания (хозмаги, базы)</td>
+                </tr>
+                <tr>
+                    <td><strong>Противовесы натяжения</strong> (гибкие грузы / мешки с камнем / малые бетонные блоки)</td>
+                    <td>4 – 8 шт.</td>
+                    <td>~ 400 – 1 500 ₽</td>
+                    <td>Плавное натяжение; вес подбирается по сечению провода и прогибу (строймаркеты, ЖБИ)</td>
+                </tr>
+                <tr>
+                    <td><strong>Кронштейны / хомуты столбовые</strong> для крепления блоков к стволу</td>
+                    <td>4 – 8 шт.</td>
+                    <td>~ 600 – 2 000 ₽</td>
+                    <td>Хомуты с шайбой под кору + абразивная лента; опционально — ушки для полиспастов (электрика, крепёж)</td>
+                </tr>
+                <tr style="background-color: #2c3e50;">
+                    <td colspan="2" style="text-align:right; font-weight:bold; color:#ecf0f1;">Подытог (Антенная часть):</td>
+                    <td colspan="2" style="font-weight:bold; color:#ecf0f1;">~ 22 100 — 32 000 ₽</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="background-color: #1e272e; color: #3498db; text-align: center; font-weight: bold;">Электроника (Мозги и Аудио)</td>
+                </tr>
+                <tr>
+                    <td><strong>DC-DC Повышающий преобразователь MT3608</strong></td>
+                    <td>2 шт (1 про запас)</td>
+                    <td>~ 150 ₽</td>
+                    <td>Ozon/WB. Делает стабильные 5V из 2.5-4.5V бочек.</td>
+                </tr>
+                <tr>
+                    <td><strong>Arduino Nano V3.0 (ATmega328P)</strong></td>
+                    <td>1 шт</td>
+                    <td>~ 350 ₽</td>
+                    <td>Ozon/WB. Управляет ШИМ-сигналом радиопередатчика.</td>
+                </tr>
+                <tr>
+                    <td><strong>DFPlayer Mini (MP3/WAV модуль)</strong></td>
+                    <td>1 шт</td>
+                    <td>~ 200 ₽</td>
+                    <td>Ozon/WB. Читает музыку с флешки. Берем сигнал с DAC_R.</td>
+                </tr>
+                <tr>
+                    <td><strong>Карта MicroSD 128GB (или 64GB)</strong></td>
+                    <td>1 шт</td>
+                    <td>~ 1000 ₽</td>
+                    <td>Любой магазин. Вместит месяцы музыки. (Форматировать в FAT32).</td>
+                </tr>
+                <tr style="background-color: #2c3e50;">
+                    <td colspan="2" style="text-align:right; font-weight:bold; color:#ecf0f1;">Подытог (Электроника):</td>
+                    <td colspan="2" style="font-weight:bold; color:#ecf0f1;">~ 1 700 ₽</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="background-color: #1e272e; color: #e74c3c; text-align: center; font-weight: bold;">Радиочастотная часть (Передатчик, 1219 кГц)</td>
+                </tr>
+                <tr>
+                    <td><strong>Модуль MOSFET D4184 или LR7843</strong></td>
+                    <td>2 шт</td>
+                    <td>~ 250 ₽</td>
+                    <td>Ozon/WB. Мощный логический ключ. Качает ток бочек в антенну (ШИМ с D9 — несущая 1219 кГц).</td>
+                </tr>
+                <tr>
+                    <td><strong>Индуктивность выводная 100 мкГн (Ток > 1.5 А)</strong></td>
+                    <td>2 шт</td>
+                    <td>~ 100 ₽</td>
+                    <td>Чип и Дип (Напр. <em>DR74-101-R</em>). П-контур под резонанс на 1219 кГц (при необходимости подбор).</td>
+                </tr>
+                <tr>
+                    <td><strong>Конденсаторы керамические 1000 пФ / 50V</strong></td>
+                    <td>5 шт</td>
+                    <td>~ 50 ₽</td>
+                    <td>Чип и Дип. Для П-контура фильтра.</td>
+                </tr>
+                <tr style="background-color: #2c3e50;">
+                    <td colspan="2" style="text-align:right; font-weight:bold; color:#ecf0f1;">Подытог (Радиочастотная часть):</td>
+                    <td colspan="2" style="font-weight:bold; color:#ecf0f1;">~ 400 ₽</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="background-color: #1e272e; color: #3498db; text-align: center; font-weight: bold;">Водяное заземление (Топология "Звезда")</td>
+                </tr>
+                <tr>
+                    <td><strong>Медная плетенка для снятия припоя (ширина 2.5 - 3.5 мм)</strong></td>
+                    <td>15 метров</td>
+                    <td>~ 1 200 ₽</td>
+                    <td>Ozon/Чип и Дип. Сплетение жилок дает идеальную поверхность для ВЧ тока.</td>
+                </tr>
+                <tr>
+                    <td><strong>Консервная банка (луженая)</strong></td>
+                    <td>1 шт</td>
+                    <td>Бесплатно</td>
+                    <td>Центральный хаб для пайки лучей.</td>
+                </tr>
+                <tr>
+                    <td><strong>Свинец (рыболовные грузила) или припой ПОС-40/Свинец</strong></td>
+                    <td>100 г</td>
+                    <td>~ 200 ₽</td>
+                    <td>Для стойкой к подводному гниению пайки.</td>
+                </tr>
+                <tr style="background-color: #2c3e50;">
+                    <td colspan="2" style="text-align:right; font-weight:bold; color:#ecf0f1;">Подытог (Водяное заземление):</td>
+                    <td colspan="2" style="font-weight:bold; color:#ecf0f1;">~ 1 400 ₽</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="background-color: #1e272e; color: #2ecc71; text-align: center; font-weight: bold;">Корпус и Защита</td>
+                </tr>
+                <tr>
+                    <td><strong>Силиконовый компаунд прозрачный ПК-68 (100г) или ПЗСК</strong></td>
+                    <td>1 упаковка</td>
+                    <td>~ 500 – 800 ₽</td>
+                    <td>Ozon / ВсеИнструменты / Чип и Дип. Монолитная влагозащита.</td>
+                </tr>
+                <tr>
+                    <td><strong>Пластиковый пищевой контейнер (маленький)</strong></td>
+                    <td>1 шт</td>
+                    <td>~ 50 ₽</td>
+                    <td>Лента/Ашан. Корпус под заливку.</td>
+                </tr>
+                <tr style="background-color: #2c3e50;">
+                    <td colspan="2" style="text-align:right; font-weight:bold; color:#ecf0f1;">Подытог (Корпус и Защита):</td>
+                    <td colspan="2" style="font-weight:bold; color:#ecf0f1;">~ 550 — 850 ₽</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align:right; font-weight:bold; color:#f1c40f; font-size: 1.2em;">ИТОГО (Химическая часть, Антенна, Электроника и заземление):</td>
+                    <td colspan="2" style="font-weight:bold; color:#f1c40f; font-size: 1.2em;">~ 60 850 — 87 150 ₽</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section" style="border-left: 4px solid #f39c12;">
+        <h2>10.1 Смета: приборы для пуско-наладки (подстройка 1219 кГц)</h2>
+        <p>Отдельно от основной сметы — то, что удобно на время пусконаладки и подстройки несущей <strong>1219 кГц</strong> и согласования П-контура с антенной. Часть можно одолжить у знакомых, взять в аренду в сервисе или не покупать вовсе, если останется достаточно бытового приёмника СВ.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Позиция</th>
+                    <th>Кол-во</th>
+                    <th>Цена (ориентир)</th>
+                    <th>Зачем на 1219 кГц</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Цифровой приёмник СВ (AM), например Tecsun PL-310ET / PL-380</strong></td>
+                    <td>1 шт.</td>
+                    <td>~ 6 500 — 9 000 ₽</td>
+                    <td>Приём на заданной частоте, оценка силы сигнала и «попадания» в 1219 кГц на месте.</td>
+                </tr>
+                <tr>
+                    <td><strong>SDR-приёмник</strong> (RTL-SDR Blog V3, Nooelec или аналог)</td>
+                    <td>1 шт.</td>
+                    <td>~ 3 500 — 9 000 ₽</td>
+                    <td>Спектр вокруг несущей, проверка на гармоники и побочные линии.</td>
+                </tr>
+                <tr>
+                    <td><strong>Карманный / портативный осциллограф</strong> (напр. FNIRSI, DSO-линейка)</td>
+                    <td>1 шт.</td>
+                    <td>~ 3 000 — 15 000 ₽</td>
+                    <td>Форма сигнала на ключе и после П-контура (при наличии щупа/делителя).</td>
+                </tr>
+                <tr>
+                    <td><strong>Частотомер</strong> (настольный или модуль с щупом) / <strong>мультиметр с частотомером</strong></td>
+                    <td>1 шт.</td>
+                    <td>~ 1 500 — 8 000 ₽</td>
+                    <td>Контроль частоты генерации на D9 (если не доверяете только «на слух» приёмнику).</td>
+                </tr>
+                <tr>
+                    <td><strong>Анализатор цепей СВЧ</strong> (NanoVNA и др.) для согласования антенны на СВ</td>
+                    <td>1 шт.</td>
+                    <td>~ 4 000 — 12 000 ₽</td>
+                    <td>Опционально: точнее согласовать фидер/антенну с П-контуром на рабочей полосе.</td>
+                </tr>
+                <tr>
+                    <td><strong>Щупы, делитель 1:10, экранированный кабель</strong></td>
+                    <td>комплект</td>
+                    <td>~ 800 — 3 500 ₽</td>
+                    <td>Безопасные измерения на ВЧ без лишнего влияния на контур.</td>
+                </tr>
+                <tr style="background-color: #2c3e50;">
+                    <td colspan="2" style="text-align:right; font-weight:bold; color:#ecf0f1;">Подытог (если брать всё новым):</td>
+                    <td colspan="2" style="font-weight:bold; color:#f39c12;">~ 19 300 — 56 500 ₽</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="font-size:0.95em; color:#bdc3c7;">Аренда/одолжить: SDR, осциллограф и частотомер часто проще временно взять у радиолюбителей; приёмник СВ полезен оставить как эталонный контроль эфира.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section" style="border-left: 4px solid #9b59b6;">
+        <h2>11. Подготовка музыки (NRSC / Психоакустика) - Задача для Python</h2>
+        <p>Физика АМ-радио обрежет любые частоты выше 4.5 - 5 кГц. Если закинуть сырые MP3 на флешку, в лесу они будут звучать как неразборчивое гудение из ведра. Нам нужно обмануть ухо слушателя (применить стандарт NRSC Pre-emphasis).</p>
+        
+        <div class="warning" style="background-color: #2c213b; border-color: #9b59b6; color: #e0e0e0;">
+            <h4 style="color: #d2b4de; margin-top: 0;">🛠 Планируемая автоматизация (ToDo):</h4>
+            <p>Необходимо написать Python-скрипт (с использованием библиотек <code>ffmpeg</code> или <code>pydub</code>), который можно будет запустить на ПК перед копированием папки с музыкой на MicroSD. Скрипт должен делать следующее с каждым файлом:</p>
+            <ol>
+                <li><strong>Pre-emphasis (Эквалайзер):</strong> Задрать частоты от 2.5 кГц до 5 кГц на +8 Децибел.</li>
+                <li><strong>Low-Pass Filter:</strong> Жестко отрезать (Brickwall) все частоты выше 5.5 кГц, чтобы они не превращались в радиопомехи.</li>
+                <li><strong>Жесткая компрессия (Limiter):</strong> Поднять тихие участки музыки, чтобы они не тонули в фоновом шуме леса, и обрезать пики для предотвращения перемодуляции передатчика.</li>
+                <li><strong>Конвертация:</strong> Сохранить результат в унифицированный MP3 (или WAV), который легко прочитает DFPlayer.</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="section" style="background-color: #2c3e50; border-left: 4px solid #f1c40f;">
+        <h2>📻 Рекомендуемые бытовые приемники для СВ-диапазона (AM / Средние Волны)</h2>
+        <p>Для уверенного приема сигнала на Средних Волнах (526 – 1606 кГц) сквозь холмы и лес подойдут приемники, имеющие встроенную ферритовую (магнитную) антенну и режим "AM" (Amplitude Modulation) или "СВ" (Средние Волны). Настройтесь на <strong>1219 кГц</strong> — частота вещания станции «Дыхание ВТВ». Ниже представлены 10 популярных моделей, которые прямо сейчас продаются на маркетплейсах РФ (Wildberries, Ozon, DNS, Яндекс.Маркет):</p>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin-top: 15px;">
+            <div style="background: #1a252f; padding: 15px; border-radius: 6px;">
+                <h4 style="margin: 0 0 10px 0; color: #34db98;">1. Tecsun PL-310ET / PL-380</h4>
+                <p style="margin: 0 0 10px 0; font-size: 0.9em;">Цифровой DSP-приемник эталонного качества. Идеальная чувствительность на СВ, отображение уровня сигнала, термометр. Любимец выживальщиков.</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2c3e50; padding-top: 10px;">
+                    <span style="color: #f1c40f; font-weight: bold;">~ 6 500 – 8 500 ₽</span>
+                    <a href="https://www.ozon.ru/category/radiopriemniki-15545/?text=Tecsun+PL-310ET" target="_blank" style="background: #2980b9; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 0.85em;">Искать на Ozon</a>
+                </div>
+            </div>
+            <div style="background: #1a252f; padding: 15px; border-radius: 6px;">
+                <h4 style="margin: 0 0 10px 0; color: #34db98;">2. Degen DE1103</h4>
+                <p style="margin: 0 0 10px 0; font-size: 0.9em;">Легенда радиоприема. Мощнейший всеволновый приемник с отличной ферритовой антенной. Берет очень слабые сигналы за десятки километров.</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2c3e50; padding-top: 10px;">
+                    <span style="color: #f1c40f; font-weight: bold;">~ 10 000 – 14 000 ₽</span>
+                    <a href="https://www.wildberries.ru/catalog/0/search.aspx?search=Degen+DE1103" target="_blank" style="background: #8e44ad; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 0.85em;">Искать на WB</a>
+                </div>
+            </div>
+            <div style="background: #1a252f; padding: 15px; border-radius: 6px;">
+                <h4 style="margin: 0 0 10px 0; color: #34db98;">3. Retekess V115</h4>
+                <p style="margin: 0 0 10px 0; font-size: 0.9em;">Бюджетный цифровой хит. Ловит AM/FM/SW, имеет mp3-плеер и диктофон (умеет записывать эфир на флешку). Заряжается как телефон.</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2c3e50; padding-top: 10px;">
+                    <span style="color: #f1c40f; font-weight: bold;">~ 1 800 – 2 500 ₽</span>
+                    <a href="https://www.ozon.ru/category/radiopriemniki-15545/?text=Retekess+V115" target="_blank" style="background: #2980b9; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 0.85em;">Искать на Ozon</a>
+                </div>
+            </div>
+            <div style="background: #1a252f; padding: 15px; border-radius: 6px;">
+                <h4 style="margin: 0 0 10px 0; color: #34db98;">4. Ritmix RPR-050</h4>
+                <p style="margin: 0 0 10px 0; font-size: 0.9em;">Классический аналоговый дизайн "под ретро". Отличная громкость, ловит СВ (AM) и КВ. Питание от сети или батареек D.</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2c3e50; padding-top: 10px;">
+                    <span style="color: #f1c40f; font-weight: bold;">~ 1 900 – 2 600 ₽</span>
+                    <a href="https://www.dns-shop.ru/search/?q=Ritmix+RPR-050" target="_blank" style="background: #e67e22; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 0.85em;">Искать в DNS</a>
+                </div>
+            </div>
+            <div style="background: #1a252f; padding: 15px; border-radius: 6px;">
+                <h4 style="margin: 0 0 10px 0; color: #34db98;">5. Harper HDR-10</h4>
+                <p style="margin: 0 0 10px 0; font-size: 0.9em;">Недорогие и надежные "походные" приемники с механической шкалой настройки. Есть диапазоны FM и AM. Дешево и сердито.</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2c3e50; padding-top: 10px;">
+                    <span style="color: #f1c40f; font-weight: bold;">~ 1 200 – 1 800 ₽</span>
+                    <a href="https://www.ozon.ru/category/radiopriemniki-15545/?text=Harper+HDR-10" target="_blank" style="background: #2980b9; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 0.85em;">Искать на Ozon</a>
+                </div>
+            </div>
+            <div style="background: #1a252f; padding: 15px; border-radius: 6px;">
+                <h4 style="margin: 0 0 10px 0; color: #34db98;">6. Panasonic RF-2400D</h4>
+                <p style="margin: 0 0 10px 0; font-size: 0.9em;">Японское качество тюнера (собирают в Индонезии/Малайзии). Аналоговая шкала, очень цепкий приемник на AM-волнах без лишних шумов.</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2c3e50; padding-top: 10px;">
+                    <span style="color: #f1c40f; font-weight: bold;">~ 4 200 – 5 500 ₽</span>
+                    <a href="https://www.wildberries.ru/catalog/0/search.aspx?search=Panasonic+RF-2400" target="_blank" style="background: #8e44ad; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 0.85em;">Искать на WB</a>
+                </div>
+            </div>
+            <div style="background: #1a252f; padding: 15px; border-radius: 6px;">
+                <h4 style="margin: 0 0 10px 0; color: #34db98;">7. XHDATA D-808</h4>
+                <p style="margin: 0 0 10px 0; font-size: 0.9em;">Аналог Tecsun, мощный цифровой сканер. Питается от аккумулятора 18650, отлично ловит Средние и Короткие волны, есть Авиа диапазон.</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2c3e50; padding-top: 10px;">
+                    <span style="color: #f1c40f; font-weight: bold;">~ 8 500 – 10 000 ₽</span>
+                    <a href="https://www.ozon.ru/category/radiopriemniki-15545/?text=XHDATA+D-808" target="_blank" style="background: #2980b9; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 0.85em;">Искать на Ozon</a>
+                </div>
+            </div>
+            <div style="background: #1a252f; padding: 15px; border-radius: 6px;">
+                <h4 style="margin: 0 0 10px 0; color: #34db98;">8. Max MR-321</h4>
+                <p style="margin: 0 0 10px 0; font-size: 0.9em;">Доступные приемники в DNS/Ситилинке. Простая аналоговая крутилка, есть AM-диапазон. Хорошо подходит для неприхотливых слушателей.</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2c3e50; padding-top: 10px;">
+                    <span style="color: #f1c40f; font-weight: bold;">~ 800 – 1 500 ₽</span>
+                    <a href="https://www.dns-shop.ru/search/?q=Max+MR-321" target="_blank" style="background: #e67e22; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 0.85em;">Искать в DNS</a>
+                </div>
+            </div>
+            <div style="background: #1a252f; padding: 15px; border-radius: 6px;">
+                <h4 style="margin: 0 0 10px 0; color: #34db98;">9. KIPO KB-308AC</h4>
+                <p style="margin: 0 0 10px 0; font-size: 0.9em;">Один из самых массовых и дешевых радиоприемников. Выглядит просто, но отлично ловит СВ (AM) за счет длинной ферритовой антенны.</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2c3e50; padding-top: 10px;">
+                    <span style="color: #f1c40f; font-weight: bold;">~ 700 – 1 200 ₽</span>
+                    <a href="https://www.wildberries.ru/catalog/0/search.aspx?search=KIPO+KB-308" target="_blank" style="background: #8e44ad; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 0.85em;">Искать на WB</a>
+                </div>
+            </div>
+            <div style="background: #1a252f; padding: 15px; border-radius: 6px;">
+                <h4 style="margin: 0 0 10px 0; color: #34db98;">10. Любая Автомагнитола</h4>
+                <p style="margin: 0 0 10px 0; font-size: 0.9em;">Практически все автомобильные магнитолы (Pioneer, JVC, Kenwood, штатные ГУ) имеют кнопку AM / MW. Автомобильная антенна отлично ловит СВ.</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2c3e50; padding-top: 10px;">
+                    <span style="color: #f1c40f; font-weight: bold;">Бесплатно (в авто)</span>
+                </div>
+            </div>
+        </div>
+        <p style="margin-top: 15px; font-size: 0.9em; color: #bdc3c7;"><strong>Важно:</strong> На Средних Волнах (AM/СВ) радиоволну ловит не внешняя телескопическая антенна-удочка (она только для FM/КВ), а встроенная внутрь корпуса магнитная (ферритовая) антенна. Поэтому для лучшего приема сам корпус приемника нужно вращать в пространстве (он имеет ярко выраженную направленность "восьмеркой").</p>
+    </div>
+
+    <script>
+        const ctxPower = document.getElementById('powerChart');
+        const ctxHeat = document.getElementById('heatChart');
+        
+        if (ctxPower && ctxHeat) {
+            const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+            const rawTemps = [-12, -10, -6, -1, 5, 10, 14, 12, 8, 1, -4, -8];
+            const temps = rawTemps.map(t => Math.min(15, Math.max(-10, t)));
+
+            // P_бат: 8…20 Вт (линейно по T в [-10, +15])
+            const totalPower = temps.map(t => parseFloat((8 + (t + 10) * (12 / 25)).toFixed(2)));
+
+            const P_LOGIC = 1.0;
+            const P_SLEEP = 2.0;
+            const ETA_PA = 0.9;
+            const ETA_ANT = 0.22;
+            const K_RANGE = 25;
+            const ALPHA_HILLY = 0.38;
+
+            const radioPower = totalPower.map(p => {
+                if (p < P_SLEEP) return 0;
+                return parseFloat(((p - P_LOGIC) * ETA_PA).toFixed(2));
+            });
+
+            const pEquiv = radioPower.map(p => parseFloat((p * ETA_ANT).toFixed(3)));
+
+            const rangeOpen = pEquiv.map(pe => {
+                if (pe <= 0) return 0;
+                return parseFloat((K_RANGE * Math.sqrt(pe)).toFixed(1));
+            });
+            const rangeHilly = rangeOpen.map(d => parseFloat((d * ALPHA_HILLY).toFixed(1)));
+            const rangeMean = rangeOpen.map((d, i) =>
+                parseFloat(((d + rangeHilly[i]) / 2).toFixed(1))
+            );
+
+            const chemHeat = [];
+            const elecHeat = [];
+            const totalHeat = [];
+
+            temps.forEach((t, i) => {
+                const p = totalPower[i];
+                const U_oper = 3.6;
+                const I = p / U_oper;
+                const q_chem = p * 1.4;
+                const R_int = 0.15 + ((15 - t) * 0.02);
+                const q_elec = Math.pow(I, 2) * R_int;
+
+                chemHeat.push(parseFloat(q_chem.toFixed(2)));
+                elecHeat.push(parseFloat(q_elec.toFixed(2)));
+                totalHeat.push(parseFloat((q_chem + q_elec).toFixed(2)));
+            });
+
+            new Chart(ctxPower.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [
+                        {
+                            type: 'line',
+                            label: 'Мощность на антенну P_нос (Вт)',
+                            data: radioPower,
+                            borderColor: '#2ecc71',
+                            backgroundColor: 'rgba(46, 204, 113, 0.35)',
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 3,
+                            yAxisID: 'y'
+                        },
+                        {
+                            type: 'line',
+                            label: 'Дальность, открытая местность (км)',
+                            data: rangeOpen,
+                            borderColor: '#f1c40f',
+                            backgroundColor: 'transparent',
+                            borderWidth: 2.5,
+                            fill: false,
+                            tension: 0.4,
+                            yAxisID: 'yRange'
+                        },
+                        {
+                            type: 'line',
+                            label: 'Дальность, лесисто-холмистая (км)',
+                            data: rangeHilly,
+                            borderColor: '#e67e22',
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            borderDash: [6, 4],
+                            fill: false,
+                            tension: 0.4,
+                            yAxisID: 'yRange'
+                        },
+                        {
+                            type: 'line',
+                            label: 'Дальность, средняя оценка (км)',
+                            data: rangeMean,
+                            borderColor: '#9b59b6',
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            borderDash: [2, 3],
+                            fill: false,
+                            tension: 0.4,
+                            yAxisID: 'yRange'
+                        },
+                        {
+                            type: 'line',
+                            label: 'Температура ячейки (°C)',
+                            data: temps,
+                            borderColor: '#3498db',
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            fill: false,
+                            tension: 0.4,
+                            yAxisID: 'yTemp'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Радиомощность (класс E) и дальность СВ (1219 кГц), заземление «звезда»',
+                            color: '#333',
+                            font: { size: 15 }
+                        },
+                        legend: { labels: { color: '#333', boxWidth: 12, font: { size: 10 } } }
+                    },
+                    scales: {
+                        x: { ticks: { color: '#666' }, grid: { color: '#eee' } },
+                        y: {
+                            type: 'linear', display: true, position: 'left',
+                            title: { display: true, text: 'Мощность на антенну (Вт)', color: '#2ecc71' },
+                            ticks: { color: '#666' }, grid: { color: '#eee' }, min: 0, max: 20
+                        },
+                        yRange: {
+                            type: 'linear', display: true, position: 'right',
+                            title: { display: true, text: 'Дальность (км)', color: '#f39c12' },
+                            ticks: { color: '#666' }, grid: { drawOnChartArea: false }, min: 0, max: 55
+                        },
+                        yTemp: {
+                            type: 'linear', display: true, position: 'right',
+                            title: { display: true, text: 'Температура (°C)', color: '#3498db' },
+                            ticks: { color: '#3498db' }, grid: { drawOnChartArea: false }, min: -15, max: 20
+                        }
+                    }
+                }
+            });
+
+            new Chart(ctxHeat.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [
+                        {
+                            label: 'Суммарное тепло (Вт)',
+                            data: totalHeat,
+                            borderColor: '#e74c3c',
+                            backgroundColor: 'rgba(231, 76, 60, 0.2)',
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 3,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Химическое тепло (Вт)',
+                            data: chemHeat,
+                            borderColor: '#e67e22',
+                            backgroundColor: 'transparent',
+                            borderDash: [5, 5],
+                            fill: false,
+                            tension: 0.4,
+                            borderWidth: 2,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Электрическое тепло (Вт)',
+                            data: elecHeat,
+                            borderColor: '#9b59b6',
+                            backgroundColor: 'transparent',
+                            borderDash: [2, 2],
+                            fill: false,
+                            tension: 0.4,
+                            borderWidth: 2,
+                            yAxisID: 'y'
+                        },
+                        {
+                            type: 'line',
+                            label: 'Температура ячейки (°C)',
+                            data: temps,
+                            borderColor: '#3498db',
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            fill: false,
+                            tension: 0.4,
+                            yAxisID: 'yTemp'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        title: { display: true, text: 'Тепловыделение (Q при P_бат 8…20 Вт по месяцам)', color: '#333', font: { size: 15 } },
+                        legend: { labels: { color: '#333' } }
+                    },
+                    scales: {
+                        x: { ticks: { color: '#666' }, grid: { color: '#eee' } },
+                        y: {
+                            type: 'linear', display: true, position: 'left',
+                            title: { display: true, text: 'Тепло (Вт)', color: '#e74c3c' },
+                            ticks: { color: '#666' }, grid: { color: '#eee' }, min: 0
+                        },
+                        yTemp: {
+                            type: 'linear', display: true, position: 'right',
+                            title: { display: true, text: 'Температура (°C)', color: '#3498db' },
+                            ticks: { color: '#3498db' }, grid: { drawOnChartArea: false }, min: -15, max: 20
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
