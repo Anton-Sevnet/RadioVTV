@@ -28,6 +28,7 @@ function go(dir) {
 function resetZoom() { scale.value = 1 }
 
 function onWheel(e) {
+  if (!isOpen.value) return
   // #region agent log
   fetch('http://127.0.0.1:7277/ingest/cc94e87f-d223-4e50-b5ea-9ad945c95ad9',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'c5ae93'},body:JSON.stringify({sessionId:'c5ae93',location:'PhotoGallery.vue:onWheel',message:'wheel event fired',data:{deltaY:e.deltaY,ctrlKey:e.ctrlKey,target:e.target?.tagName,currentIdx:current.value},hypothesisId:'H-A',timestamp:Date.now()})}).catch(()=>{})
   // #endregion
@@ -68,9 +69,13 @@ watch(() => props.modelValue, (newVal) => {
 // Блокировка прокрутки страницы когда галерея открыта
 watch(isOpen, (v) => { document.body.style.overflow = v ? 'hidden' : '' })
 
-onMounted(() => window.addEventListener('keydown', onKey))
+onMounted(() => {
+  window.addEventListener('keydown', onKey)
+  window.addEventListener('wheel', onWheel, { passive: false })
+})
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', onKey)
+  window.removeEventListener('wheel', onWheel)
   document.body.style.overflow = ''
 })
 </script>
@@ -84,7 +89,6 @@ onBeforeUnmount(() => {
         @click.self="close"
         @touchstart.passive="onTouchStart"
         @touchend.passive="onTouchEnd"
-        @wheel.prevent="onWheel"
       >
         <!-- Закрыть -->
         <button
