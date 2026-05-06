@@ -1,0 +1,45 @@
+---
+description: Build and deploy pipeline for RadioVTV
+globs: .github/**,vite.config.js,package.json
+alwaysApply: false
+---
+
+# Деплой RadioVTV
+
+## Порядок сборки (строго последовательно)
+
+```bash
+npm run build                               # 1. Vite → dist/
+python .github/scripts/build_presentation.py  # 2. dist/ → deploy/ + PHP-обёртка
+# далее CI: SCP deploy/* → at5.su:4422
+```
+
+**Никогда не запускать шаг 2 без шага 1** — скрипт читает `dist/index.html`.
+
+## Что делает build_presentation.py
+
+1. Берёт `dist/index.html`
+2. Добавляет PHP-пролог Bitrix (`prolog_before.php`)
+3. Инжектирует `<script>window.ASSET_BASE='<?= ... ?>'</script>` — нужен для картинок
+4. Заменяет `<title>` на `$APPLICATION->ShowTitle()`
+5. Копирует всё из `dist/` + 6 `.jpg`-фото в `deploy/`
+6. Выходной файл: `deploy/index.php`
+
+## Vite base path
+
+В `vite.config.js` жёстко прописан:
+```js
+base: '/local/presentations/power_system_zapolyarye/'
+```
+**Не менять** — все asset-пути в сборке завязаны на него.
+
+## Сервер
+
+- Хост: `at5.su`, порт SSH `4422`, пользователь `bitrix`
+- Деплой-путь: `/home/bitrix/www/local/presentations/power_system_zapolyarye/`
+- Secret в GitHub: `ALTTECHNO` (приватный SSH-ключ)
+- MCP для диагностики: `user-ssh-alttechno-bitrix` или `user-ssh-alttechno-root`
+
+## Роутинг
+
+`www/urlrewrite.php` — **всегда копировать вместе с деплоем**, иначе сломается ЧПУ `/RadioVTV`.

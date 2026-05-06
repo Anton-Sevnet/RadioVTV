@@ -1,0 +1,75 @@
+---
+description: Rules for editing Vue components in RadioVTV
+globs: src/**/*.vue
+alwaysApply: false
+---
+
+# Vue-компоненты RadioVTV
+
+## Структура компонента
+
+- Всегда `<script setup>` (Composition API) — не Options API, не миксины
+- Порядок блоков: `<script setup>` → `<template>` → (нет `<style>`, стили через Tailwind)
+- Данные из `src/constants/` импортировать в `<script setup>`, не дублировать в шаблоне
+
+## Стили
+
+```vue
+<!-- ❌ -->
+<div style="background:#111; padding:20px">
+
+<!-- ✅ -->
+<div class="bg-gray-900 p-5">
+```
+
+Повторяющиеся паттерны → добавить в `src/style.css` как `@layer components`.
+
+## Картинки (фото Заполярья)
+
+```js
+// ✅ — всегда через img() из constants
+import { img } from '../constants/images.js'
+// <img :src="img('filename.jpg')" />
+
+// ❌ — не хардкодить путь
+// <img src="/local/presentations/..." />
+```
+
+## Chart.js (только в PowerCharts.vue)
+
+- Инициализация в `onMounted`, canvas через `ref`
+- `Chart.register(...registerables)` обязателен один раз при импорте
+- При изменении данных пересчитывать через те же переменные в `onMounted`
+
+## Three.js (только в AntennaScene.vue)
+
+- Инициализация в `onMounted`, очистка в `onBeforeUnmount`
+- `renderer.dispose()` + `cancelAnimationFrame(animId)` при размонтировании
+- Не менять геометрию сцены (позиции деревьев, бочек, антенны) без явного запроса
+
+## SVG-схемы (BarrelDiagram.vue, BlockDiagram.vue)
+
+- SVG-координаты (`viewBox`, `d=`, `cx=`, `x=`, `y=`) — **не трогать**
+- Можно менять только тексты подписей и цвета заливок
+
+## Секции-идентификаторы (id=)
+
+Каждая секция имеет `id` для навигации из `NavBar.vue`:
+
+| id | Компонент |
+|---|---|
+| overview | OverviewSection.vue |
+| philosophy | PhilosophySection.vue |
+| mno2 | MnO2Section.vue |
+| underground | UndergroundSection.vue |
+| barrel | BarrelDiagram.vue |
+| chemistry | ChemistrySection.vue |
+| charts | PowerCharts.vue |
+| diagram | BlockDiagram.vue |
+| assembly | AssemblyGuide.vue |
+| antenna | AntennaScene.vue |
+| housing | HousingSection.vue |
+| budget | BudgetTable.vue |
+| calibration | CalibrationTable.vue |
+| receivers | ReceiversSection.vue |
+| audio | AudioSection.vue |

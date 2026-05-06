@@ -1,0 +1,37 @@
+---
+description: Project structure, stack, and critical anti-SLOP rules for RadioVTV
+alwaysApply: true
+---
+
+# RadioVTV — Правила проекта
+
+## Стек (это НЕ старый HTML-проект)
+
+- **Vite 5 + Vue 3 + Tailwind CSS 3** — исходники в `src/`
+- **Chart.js** (импорт из пакета) и **Three.js** (импорт из пакета) — не CDN
+- Деплой: `npm run build` → `python .github/scripts/build_presentation.py` → SCP на `at5.su:4422`
+- Живой сайт: `https://alttechno.ru/RadioVTV`
+
+## Что НЕЛЬЗЯ делать
+
+- ❌ Редактировать или воссоздавать `power-system-zapolyarye-transmitter-guide.html` — файл удалён намеренно, он заменён Vue-компонентами
+- ❌ Добавлять `<script src="cdn...">` в HTML — все библиотеки установлены через `npm`
+- ❌ Писать `style="..."` inline — только Tailwind-классы
+- ❌ Класть бизнес-данные (смета, списки, шаги) прямо в шаблоны компонентов — они живут в `src/constants/`
+- ❌ Менять SVG-координаты в `BarrelDiagram.vue` и `BlockDiagram.vue` без явного запроса — там точные схемы
+- ❌ Запускать `python build_presentation.py` без предварительного `npm run build` — скрипт читает `dist/`
+
+## Где что лежит
+
+| Задача | Файл |
+|---|---|
+| Добавить/изменить секцию страницы | `src/components/<SectionName>.vue` |
+| Изменить данные сметы | `src/constants/budget.js` |
+| Изменить список приёмников | `src/constants/receivers.js` |
+| Изменить шаги сборки | `src/constants/assembly.js` |
+| Изменить пути к картинкам | `src/constants/images.js` |
+| Глобальные Tailwind-компоненты | `src/style.css` (`@layer components`) |
+| SEO / Open Graph / JSON-LD | `index.html` |
+| Роутинг Bitrix (/RadioVTV, /dvtv) | `www/urlrewrite.php` |
+| CI/CD пайплайн | `.github/workflows/deploy.yml` |
+| PHP-обёртка для Bitrix | `.github/scripts/build_presentation.py` |
