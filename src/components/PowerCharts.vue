@@ -139,8 +139,10 @@ onMounted(() => {
       приоритет «мозгам» <strong class="text-white">до 1 Вт</strong>,
       усилитель класса E (П-контур), короткая L-антенна с водяным заземлением «звезда».
     </p>
-    <div class="bg-white rounded-xl p-4 mb-8">
-      <canvas ref="powerCanvasRef" height="100" />
+    <div class="overflow-x-auto bg-white rounded-xl p-4 mb-8">
+      <div class="min-w-[640px]">
+        <canvas ref="powerCanvasRef" height="100" />
+      </div>
     </div>
 
     <h3 class="text-accent-red font-semibold mb-3 text-base">
@@ -150,8 +152,10 @@ onMounted(() => {
       Химическое тепло Q_хим ≈ 1.4·P_бат; электрическое Q_эл = I²R_внутр.
       Снижением эффективности из-за зашламления в пределах 15% пренебрегаем.
     </p>
-    <div class="bg-white rounded-xl p-4 mb-6">
-      <canvas ref="heatCanvasRef" height="100" />
+    <div class="overflow-x-auto bg-white rounded-xl p-4 mb-6">
+      <div class="min-w-[640px]">
+        <canvas ref="heatCanvasRef" height="100" />
+      </div>
     </div>
 
     <!-- Audit block -->
