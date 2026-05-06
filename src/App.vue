@@ -19,7 +19,8 @@ import ReceiversSection  from './components/ReceiversSection.vue'
 import AudioSection      from './components/AudioSection.vue'
 
 const showLink = ref(false)
-const recaptchaContainer = ref(null)
+const recaptchaContainerTop = ref(null)
+const recaptchaContainerBottom = ref(null)
 const tgLink = ref('')
 
 onMounted(() => {
@@ -29,16 +30,21 @@ onMounted(() => {
   script.defer = true
   script.onload = () => {
     if (window.grecaptcha) {
-      window.grecaptcha.render(recaptchaContainer.value, {
-        sitekey: '6LcE-dssAAAAADXr3BTVYE3EYvfrR5-uGp6wIyaq',
-        theme: 'dark',
-        callback: (response) => {
-          if (response) {
-            showLink.value = true
-            tgLink.value = 'https://' + ['t', 'm', 'e'].join('.') + '/' + ['s', 'e', 'v', 'n', 'e', 't'].join('')
+      const renderWidget = (el) => {
+        if (!el) return
+        window.grecaptcha.render(el, {
+          sitekey: '6LcE-dssAAAAADXr3BTVYE3EYvfrR5-uGp6wIyaq',
+          theme: 'dark',
+          callback: (response) => {
+            if (response) {
+              showLink.value = true
+              tgLink.value = 'https://' + ['t', 'm', 'e'].join('.') + '/' + ['s', 'e', 'v', 'n', 'e', 't'].join('')
+            }
           }
-        }
-      })
+        })
+      }
+      renderWidget(recaptchaContainerTop.value)
+      renderWidget(recaptchaContainerBottom.value)
     }
   }
   document.head.appendChild(script)
@@ -50,6 +56,19 @@ onMounted(() => {
     <NavBar />
 
     <HeroSection />
+
+    <div class="max-w-6xl mx-auto px-4 pt-4 flex justify-end">
+      <div v-show="!showLink" ref="recaptchaContainerTop" class="scale-75 origin-right opacity-30 hover:opacity-100 transition-opacity"></div>
+      <a
+        v-if="showLink"
+        :href="tgLink"
+        target="_blank"
+        rel="noopener"
+        class="text-gray-500 hover:text-[#229ED9] text-sm transition-colors"
+      >
+        Связь с автором: @sevnet
+      </a>
+    </div>
 
     <main class="max-w-6xl mx-auto px-4 py-6 space-y-0">
       <OverviewSection />
@@ -71,7 +90,7 @@ onMounted(() => {
 
     <footer class="max-w-6xl mx-auto px-4 py-10 mt-4 border-t border-white/10 text-center">
       <div class="flex flex-col items-center gap-4">
-        <div v-show="!showLink" ref="recaptchaContainer" class="my-2 min-h-[78px]"></div>
+        <div v-show="!showLink" ref="recaptchaContainerBottom" class="my-2 min-h-[78px]"></div>
         <a
           v-if="showLink"
           :href="tgLink"
