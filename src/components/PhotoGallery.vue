@@ -20,6 +20,7 @@ const targetPhoto  = computed(() => props.images[current.value])
 const watermark    = computed(() => targetPhoto.value?.author ? `Фото: ${targetPhoto.value.author}` : '')
 
 let loadToken = 0
+let lastWheelNavAt = 0
 
 function loadCurrentImage() {
   if (!isOpen.value || !targetPhoto.value) return
@@ -69,6 +70,9 @@ function onWheel(e) {
     const delta = e.deltaY < 0 ? 1.12 : 0.89
     scale.value = Math.min(8, Math.max(0.3, scale.value * delta))
   } else {
+    const now = Date.now()
+    if (now - lastWheelNavAt < 260) return
+    lastWheelNavAt = now
     go(e.deltaY > 0 ? 1 : -1)
   }
 }
