@@ -23,6 +23,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # VITE_* попадает в публичный JS: нужен только «Ключ сайта» (первая строка в админке reCAPTCHA).
+      # «Секретный ключ» в Vite использовать нельзя — он попадёт в бандл и станет доступен всем.
       - name: Build Vite app
         env:
           VITE_RECAPTCHA_SITE_KEY: ${{ secrets.VITE_RECAPTCHA_SITE_KEY }}

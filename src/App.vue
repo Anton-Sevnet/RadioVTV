@@ -19,11 +19,24 @@ import CalibrationTable     from './components/CalibrationTable.vue'
 import ReceiversSection     from './components/ReceiversSection.vue'
 import AudioSection         from './components/AudioSection.vue'
 
-/** Только из сборки: задайте в GitHub Actions секрет VITE_RECAPTCHA_SITE_KEY (reCAPTCHA v2 «флажок»). */
-const RECAPTCHA_SITE_KEY =
+/** Публичный site key вашей регистрации — безопасен для фронтенда. */
+const FALLBACK_SITE_KEY = '6LcE-dssAAAAADXr3BTVYE3EYvfrR5-uGp6wIyaq'
+
+/** Секретный ключ из консоли reCAPTCHA (для сервера) ошибочно кладут в VITE_* — здесь блокируем. */
+const KEYS_MISTAKEN_FOR_SITE = ['6LcE-dssAAAAAPT3hKBC6fZIwjE0zjj2L1q1XFSd']
+
+/** Только из сборки или fallback: GitHub секрет тоже должен содержать КЛЮЧ САЙТА, не секрет сервера. */
+const RAW_RECAPTCHA_KEY =
   typeof import.meta.env.VITE_RECAPTCHA_SITE_KEY === 'string'
     ? import.meta.env.VITE_RECAPTCHA_SITE_KEY.trim()
     : ''
+
+const RECAPTCHA_SITE_KEY =
+  KEYS_MISTAKEN_FOR_SITE.includes(RAW_RECAPTCHA_KEY)
+    ? FALLBACK_SITE_KEY
+    : RAW_RECAPTCHA_KEY.length > 0
+      ? RAW_RECAPTCHA_KEY
+      : FALLBACK_SITE_KEY
 
 const recaptchaEnabled = RECAPTCHA_SITE_KEY.length >= 30
 
@@ -157,17 +170,6 @@ onMounted(() => {
       <div class="flex flex-col items-center gap-6 text-center">
         <TelegramAuthorCta variant="footer" />
 
-        <p
-          v-if="!recaptchaEnabled"
-          class="text-gray-600 text-xs max-w-md leading-relaxed m-0"
-        >
-          Антиспам: включите виджет, добавив в GitHub секрет Actions
-          <span class="text-gray-400"> VITE_RECAPTCHA_SITE_KEY</span>
-          — это Site Key вида «флажок» reCAPTCHA v2, с доменами
-          <span class="text-gray-400">alttechno.ru</span> и при необходимости
-          <span class="text-gray-400">www.alttechno.ru</span>.
-        </p>
-
         <div
           v-if="recaptchaEnabled && recaptchaShowPanel"
           class="w-full max-w-md rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-5"
@@ -184,8 +186,9 @@ onMounted(() => {
             Если раньше был «ошибка ключа» — чаще всего ключ не того типа (нужна v2) или в доменах нет
             <span class="text-gray-400">alttechno.ru</span> /
             <span class="text-gray-400">www.alttechno.ru</span>.
-            Ключ в сборке задаётся секретом
-            <span class="text-gray-400">VITE_RECAPTCHA_SITE_KEY</span>.
+            Ключ в сборке — секрет
+            <span class="text-gray-400">VITE_RECAPTCHA_SITE_KEY</span>
+            (только «Ключ сайта», не «Секретный ключ» с сервера).
           </p>
           <div
             ref="recaptchaContainer"
