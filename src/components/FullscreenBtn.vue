@@ -8,7 +8,14 @@ const props = defineProps({
 const isFs = ref(false)
 
 function getEl() {
-  return props.targetRef?.value ?? null
+  // Vue unwraps ref automatically when passed via props
+  // props.targetRef is the DOM element directly, not a ref object
+  const ref = props.targetRef
+  if (!ref) return null
+  // If it's already a DOM element, return it
+  if (ref instanceof Element) return ref
+  // If it's a Vue ref object, unwrap it
+  return ref.value ?? null
 }
 
 async function toggle() {
@@ -68,9 +75,9 @@ onBeforeUnmount(() => {
 <template>
   <button
     type="button"
-    @click.stop="toggle"
+    @click="toggle"
     :title="isFs ? 'Выйти из полного экрана (Esc)' : 'На весь экран'"
-    class="absolute top-2 right-2 z-20 flex items-center justify-center w-9 h-9 rounded-lg bg-black/40 hover:bg-black/65 active:scale-95 transition-all border border-white/25 backdrop-blur-sm"
+    class="absolute top-2 right-2 z-50 flex items-center justify-center w-9 h-9 rounded-lg bg-black/40 hover:bg-black/65 active:scale-95 transition-all border border-white/25 backdrop-blur-sm pointer-events-auto"
     aria-label="Переключить полный экран"
   >
     <!-- Expand: 4 угловые скобки наружу -->
