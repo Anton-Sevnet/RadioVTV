@@ -1,0 +1,32 @@
+name: Deploy presentation
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Bitrix presentation
+        run: python .github/scripts/build_presentation.py
+
+      - name: Prepare SSH
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.ALTTECHNO }}" > ~/.ssh/alttechno
+          chmod 600 ~/.ssh/alttechno
+          ssh-keyscan -p 4422 at5.su >> ~/.ssh/known_hosts
+
+      - name: Deploy to alttechno.ru
+        run: |
+          ssh -i ~/.ssh/alttechno -p 4422 bitrix@at5.su \
+            "mkdir -p /home/bitrix/www/local/presentations/power_system_zapolyarye"
+          scp -i ~/.ssh/alttechno -P 4422 deploy/* \
+            bitrix@at5.su:/home/bitrix/www/local/presentations/power_system_zapolyarye/
