@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import { img, imgAsset, PHOTOS, GALLERY_PHOTOS } from '../constants/images.js'
 import PhotoGallery from './PhotoGallery.vue'
+import TelegramAuthorCta from './TelegramAuthorCta.vue'
 
 const galleryIndex = ref(null)
 function openGallery(i) { galleryIndex.value = i }
@@ -92,6 +93,8 @@ function previewToGallery(i) {
           прозрачная заливка силиконом и высокоэффективное водяное заземление «Звезда».
           Целевая несущая в эфире — <strong class="text-white">1219 кГц</strong> (средние волны).
         </p>
+
+        <TelegramAuthorCta variant="hero" />
       </div>
     </div>
   </header>

@@ -1,68 +1,121 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import NavBar            from './components/NavBar.vue'
-import HeroSection       from './components/HeroSection.vue'
-import OverviewSection   from './components/OverviewSection.vue'
-import PhilosophySection from './components/PhilosophySection.vue'
-import MnO2Section       from './components/MnO2Section.vue'
-import UndergroundSection from './components/UndergroundSection.vue'
-import BarrelDiagram     from './components/BarrelDiagram.vue'
-import ChemistrySection  from './components/ChemistrySection.vue'
-import PowerCharts       from './components/PowerCharts.vue'
-import BlockDiagram      from './components/BlockDiagram.vue'
-import AssemblyGuide     from './components/AssemblyGuide.vue'
-import AntennaScene      from './components/AntennaScene.vue'
-import HousingSection    from './components/HousingSection.vue'
-import BudgetTable       from './components/BudgetTable.vue'
-import CalibrationTable  from './components/CalibrationTable.vue'
-import ReceiversSection  from './components/ReceiversSection.vue'
-import AudioSection      from './components/AudioSection.vue'
+import NavBar               from './components/NavBar.vue'
+import HeroSection          from './components/HeroSection.vue'
+import TelegramAuthorCta    from './components/TelegramAuthorCta.vue'
+import OverviewSection      from './components/OverviewSection.vue'
+import PhilosophySection    from './components/PhilosophySection.vue'
+import MnO2Section          from './components/MnO2Section.vue'
+import UndergroundSection   from './components/UndergroundSection.vue'
+import BarrelDiagram        from './components/BarrelDiagram.vue'
+import ChemistrySection     from './components/ChemistrySection.vue'
+import PowerCharts          from './components/PowerCharts.vue'
+import BlockDiagram         from './components/BlockDiagram.vue'
+import AssemblyGuide        from './components/AssemblyGuide.vue'
+import AntennaScene         from './components/AntennaScene.vue'
+import HousingSection       from './components/HousingSection.vue'
+import BudgetTable          from './components/BudgetTable.vue'
+import CalibrationTable     from './components/CalibrationTable.vue'
+import ReceiversSection     from './components/ReceiversSection.vue'
+import AudioSection         from './components/AudioSection.vue'
 
-const recaptchaContainerTop = ref(null)
-const recaptchaContainerBottom = ref(null)
-const telegramUrl = ref('')
+/** Позволяет подставить ключ из GitHub Secret / локального `.env` без правки кода. */
+const RECAPTCHA_SITE_KEY =
+  typeof import.meta.env.VITE_RECAPTCHA_SITE_KEY === 'string' && import.meta.env.VITE_RECAPTCHA_SITE_KEY.length > 0
+    ? import.meta.env.VITE_RECAPTCHA_SITE_KEY
+    : '6LcE-dssAAAAADXr3BTVYE3EYvfrR5-uGp6wIyaq'
 
-function renderRecaptcha() {
-  if (!window.grecaptcha) return
+const recaptchaContainer = ref(null)
+const recaptchaShowPanel = ref(true)
+const recaptchaRendered = ref(false)
 
-  const renderWidgets = () => {
-    ;[recaptchaContainerTop.value, recaptchaContainerBottom.value].forEach((el) => {
-      if (!el) return
+function debugLog(runId, hypothesisId, location, message, data) {
+  // #region agent log
+  fetch('http://127.0.0.1:7277/ingest/cc94e87f-d223-4e50-b5ea-9ad945c95ad9', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '5cc65f' },
+    body: JSON.stringify({
+      sessionId: '5cc65f',
+      runId,
+      hypothesisId,
+      location,
+      message,
+      data,
+      timestamp: Date.now(),
+    }),
+  }).catch(() => {})
+  // #endregion
+}
 
-      try {
-        window.grecaptcha.render(el, {
-          sitekey: '6LcE-dssAAAAADXr3BTVYE3EYvfrR5-uGp6wIyaq',
-          theme: 'dark',
-          size: 'compact'
-        })
-      } catch {
-        // Контакт не должен исчезать у людей, если Google reCAPTCHA недоступна.
-      }
+function renderRecaptchaWidget(runId) {
+  if (!window.grecaptcha || !recaptchaContainer.value || recaptchaRendered.value) return
+
+  try {
+    const id = window.grecaptcha.render(recaptchaContainer.value, {
+      sitekey: RECAPTCHA_SITE_KEY,
+      theme: 'dark',
+      size: 'normal',
+    })
+
+    recaptchaRendered.value = true
+    debugLog(runId, 'H2', 'App.vue:renderRecaptchaWidget', 'recaptcha_render_ok', {
+      widgetId: id,
+      siteKeyPrefix: RECAPTCHA_SITE_KEY.slice(0, 8),
+    })
+  } catch (err) {
+    recaptchaShowPanel.value = false
+    debugLog(runId, 'H2', 'App.vue:renderRecaptchaWidget', 'recaptcha_render_throw', {
+      name: err?.name,
+      message: err?.message,
     })
   }
+}
 
-  if (typeof window.grecaptcha.ready === 'function') {
-    window.grecaptcha.ready(renderWidgets)
+function bootRecaptcha(runId) {
+  debugLog(runId, 'H1', 'App.vue:bootRecaptcha', 'recaptcha_boot', {
+    host: window.location.host,
+    hostname: window.location.hostname,
+    protocol: window.location.protocol,
+    path: window.location.pathname,
+    siteKeyPrefix: RECAPTCHA_SITE_KEY.slice(0, 8),
+    hasGrecaptcha: Boolean(window.grecaptcha),
+  })
+
+  const startRender = () => {
+    if (typeof window.grecaptcha.ready === 'function') {
+      window.grecaptcha.ready(() => renderRecaptchaWidget(runId))
+    } else {
+      renderRecaptchaWidget(runId)
+    }
+  }
+
+  if (window.grecaptcha) {
+    startRender()
     return
   }
 
-  renderWidgets()
-}
-
-onMounted(() => {
-  telegramUrl.value = 'https://' + ['t', 'me'].join('.') + '/' + ['s', 'e', 'v', 'n', 'e', 't'].join('')
-
-  if (window.grecaptcha) {
-    renderRecaptcha()
+  const existing = document.querySelector('script[data-radio-vtv-recaptcha="1"]')
+  if (existing) {
+    existing.addEventListener('load', startRender, { once: true })
     return
   }
 
   const script = document.createElement('script')
+  script.dataset.radioVtvRecaptcha = '1'
   script.src = 'https://www.google.com/recaptcha/api.js?render=explicit&hl=ru'
   script.async = true
   script.defer = true
-  script.onload = renderRecaptcha
+  script.onload = startRender
+  script.onerror = () => {
+    recaptchaShowPanel.value = false
+    debugLog(runId, 'H4', 'App.vue:bootRecaptcha', 'recaptcha_script_error', { src: script.src })
+  }
   document.head.appendChild(script)
+}
+
+onMounted(() => {
+  const runId = `page-${Date.now()}`
+  bootRecaptcha(runId)
 })
 </script>
 
@@ -71,18 +124,6 @@ onMounted(() => {
     <NavBar />
 
     <HeroSection />
-
-    <div class="max-w-6xl mx-auto px-4 pt-4 flex flex-col items-end gap-1">
-      <a
-        :href="telegramUrl || undefined"
-        target="_blank"
-        rel="noopener"
-        class="text-gray-500 hover:text-[#229ED9] text-xs md:text-sm transition-colors"
-      >
-        Связь с автором: @sevnet
-      </a>
-      <div ref="recaptchaContainerTop" class="scale-[0.7] origin-top-right opacity-25 hover:opacity-90 transition-opacity"></div>
-    </div>
 
     <main class="max-w-6xl mx-auto px-4 py-6 space-y-0">
       <OverviewSection />
@@ -102,21 +143,23 @@ onMounted(() => {
       <AudioSection />
     </main>
 
-    <footer class="max-w-6xl mx-auto px-4 py-10 mt-4 border-t border-white/10 text-center">
-      <div class="flex flex-col items-center gap-4">
-        <div ref="recaptchaContainerBottom" class="min-h-[78px]"></div>
-        <a
-          :href="telegramUrl || undefined"
-          target="_blank"
-          rel="noopener"
-          class="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#229ED9]/15 border border-[#229ED9]/30 text-[#229ED9] hover:bg-[#229ED9]/25 hover:border-[#229ED9]/60 transition-all no-underline font-medium text-sm"
+    <footer class="max-w-6xl mx-auto px-4 py-10 mt-4 border-t border-white/10">
+      <div class="flex flex-col items-center gap-6 text-center">
+        <div
+          v-if="recaptchaShowPanel"
+          class="w-full max-w-md rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4"
         >
-          <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.19 13.367l-2.97-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.636.219z"/>
-          </svg>
-          Связь: @sevnet
-        </a>
-        <p class="text-gray-600 text-xs">
+          <p class="text-gray-500 text-xs mb-3 m-0 leading-relaxed">
+            Подтверждение reCAPTCHA (Google). Если появляется «ошибка ключа», в консоли reCAPTCHA в списке доменов
+            должны быть <span class="text-gray-400">alttechno.ru</span> и при необходимости
+            <span class="text-gray-400">www.alttechno.ru</span>.
+          </p>
+          <div ref="recaptchaContainer" class="flex justify-center min-h-[78px]" />
+        </div>
+
+        <TelegramAuthorCta variant="footer" />
+
+        <p class="text-gray-600 text-xs m-0">
           Радиостанция «Дыхание ВТВ» · 1219 кГц · Кольский полуостров · Заполярье
         </p>
       </div>

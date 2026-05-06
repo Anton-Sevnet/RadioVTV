@@ -24,6 +24,8 @@ jobs:
         run: npm ci
 
       - name: Build Vite app
+        env:
+          VITE_RECAPTCHA_SITE_KEY: ${{ secrets.VITE_RECAPTCHA_SITE_KEY }}
         run: npm run build
 
       - name: Build Bitrix presentation (wrap in PHP prolog)
