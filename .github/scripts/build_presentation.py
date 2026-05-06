@@ -58,6 +58,15 @@ def main() -> None:
         if src.exists():
             shutil.copy2(src, DEPLOY_DIR / image)
 
+    # Copy full-resolution gallery images from assets/
+    assets_src = ROOT / "assets"
+    assets_dst = DEPLOY_DIR / "assets"
+    if assets_src.exists():
+        assets_dst.mkdir(parents=True, exist_ok=True)
+        for f in assets_src.iterdir():
+            if f.is_file():
+                shutil.copy2(f, assets_dst / f.name)
+
     # Process index.html: inject PHP prolog + ASSET_BASE
     source = (DIST_DIR / "index.html").read_text(encoding="utf-8")
 

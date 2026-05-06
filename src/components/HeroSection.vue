@@ -1,10 +1,22 @@
 <script setup>
-import { ref } from 'vue'
-import { img, PHOTOS } from '../constants/images.js'
+import { ref, computed } from 'vue'
+import { img, imgAsset, PHOTOS, GALLERY_PHOTOS } from '../constants/images.js'
 import PhotoGallery from './PhotoGallery.vue'
 
 const galleryIndex = ref(null)
 function openGallery(i) { galleryIndex.value = i }
+
+// Полноразмерные фото с resolved URL — открываются в просмотрщике
+const galleryPhotos = computed(() =>
+  GALLERY_PHOTOS.map(p => ({ ...p, src: imgAsset(p.src) }))
+)
+
+// Соответствие: индекс превью-фото → индекс в галерее (по имени файла)
+function previewToGallery(i) {
+  const previewSrc = PHOTOS[i].src
+  const gi = GALLERY_PHOTOS.findIndex(p => p.src === previewSrc)
+  return gi >= 0 ? gi : 0
+}
 </script>
 
 <template>
@@ -21,7 +33,7 @@ function openGallery(i) { galleryIndex.value = i }
           v-for="(photo, i) in PHOTOS"
           :key="photo.src"
           class="overflow-hidden cursor-pointer"
-          @click="openGallery(i)"
+          @click="openGallery(previewToGallery(i))"
         >
           <img
             :src="img(photo.src)"
@@ -32,9 +44,9 @@ function openGallery(i) { galleryIndex.value = i }
         </div>
       </div>
 
-      <!-- Кнопка Галерея — поверх фото, левый нижний угол -->
+      <!-- Кнопка Галерея — поверх фото, правый нижний угол -->
       <button
-        class="absolute bottom-4 left-4 z-20 flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-base text-white shadow-xl
+        class="absolute bottom-4 right-4 z-20 flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-base text-white shadow-xl
                bg-gradient-to-r from-blue-700 to-emerald-700 hover:from-blue-600 hover:to-emerald-600
                ring-1 ring-emerald-400/30 hover:ring-emerald-400/60
                transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0"
@@ -50,8 +62,8 @@ function openGallery(i) { galleryIndex.value = i }
       </button>
     </div>
 
-    <!-- Модальный просмотрщик -->
-    <PhotoGallery v-model="galleryIndex" :images="PHOTOS" />
+    <!-- Модальный просмотрщик (полноразмерные фото из assets/) -->
+    <PhotoGallery v-model="galleryIndex" :images="galleryPhotos" />
 
     <!-- Hero content -->
     <div class="relative z-20 max-w-7xl mx-auto px-4 py-10 -mt-16">

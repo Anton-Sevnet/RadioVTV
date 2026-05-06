@@ -1,6 +1,5 @@
 <script setup>
 import { ref, watch, onMounted, onBeforeUnmount, computed } from 'vue'
-import { img } from '../constants/images.js'
 
 const props = defineProps({
   modelValue: { type: Number, default: null }, // null = закрыто, иначе индекс текущего фото
@@ -102,7 +101,7 @@ onBeforeUnmount(() => {
         <div class="flex items-center justify-center w-full h-full overflow-hidden pointer-events-none">
           <img
             ref="imgEl"
-            :src="img(images[current].src)"
+            :src="images[current].src"
             :alt="images[current].alt"
             class="max-w-[90vw] max-h-[85vh] rounded-xl shadow-2xl object-contain transition-transform duration-100"
             :style="{ transform: `scale(${scale})` }"
