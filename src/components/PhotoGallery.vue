@@ -7,14 +7,52 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:modelValue'])
 
-const scale  = ref(1)
-const imgEl  = ref(null)
+const scale        = ref(1)
+const displayIndex = ref(null)
+const isLoading    = ref(false)
+const numberKey    = ref(0)
 
 const isOpen  = computed(() => props.modelValue !== null)
 const current = computed(() => props.modelValue ?? 0)
 const total   = computed(() => props.images.length)
+const displayPhoto = computed(() => props.images[displayIndex.value ?? current.value])
+const targetPhoto  = computed(() => props.images[current.value])
+const watermark    = computed(() => targetPhoto.value?.author ? `Фото: ${targetPhoto.value.author}` : '')
 
-function close() { emit('update:modelValue', null) }
+let loadToken = 0
+
+function loadCurrentImage() {
+  if (!isOpen.value || !targetPhoto.value) return
+
+  const token = ++loadToken
+  const targetIndex = current.value
+  const image = new Image()
+
+  scale.value = 1
+  isLoading.value = true
+  numberKey.value += 1
+
+  image.onload = () => {
+    if (token !== loadToken) return
+    displayIndex.value = targetIndex
+    isLoading.value = false
+  }
+
+  image.onerror = () => {
+    if (token !== loadToken) return
+    displayIndex.value = targetIndex
+    isLoading.value = false
+  }
+
+  image.src = targetPhoto.value.src
+}
+
+function close() {
+  loadToken += 1
+  isLoading.value = false
+  displayIndex.value = null
+  emit('update:modelValue', null)
+}
 
 function go(dir) {
   scale.value = 1
@@ -54,7 +92,8 @@ function onTouchEnd(e) {
 
 // Сброс зума при смене фото
 watch(() => props.modelValue, () => {
-  scale.value = 1
+  if (props.modelValue === null) return
+  loadCurrentImage()
 })
 
 // Блокировка прокрутки страницы когда галерея открыта
@@ -104,15 +143,38 @@ onBeforeUnmount(() => {
         >‹</button>
 
         <!-- Фото -->
-        <div class="flex items-center justify-center w-full h-full overflow-hidden pointer-events-none">
+        <div class="relative flex items-center justify-center w-full h-full overflow-hidden pointer-events-none">
           <img
-            ref="imgEl"
-            :src="images[current].src"
-            :alt="images[current].alt"
-            class="max-w-[90vw] max-h-[85vh] rounded-xl shadow-2xl object-contain transition-transform duration-100"
+            v-if="displayPhoto"
+            :src="displayPhoto.src"
+            :alt="displayPhoto.alt"
+            class="max-w-[90vw] max-h-[85vh] rounded-xl shadow-2xl object-contain transition-all duration-300"
+            :class="{ 'blur-md opacity-55 saturate-50': isLoading }"
             :style="{ transform: `scale(${scale})` }"
             draggable="false"
           />
+
+          <div
+            v-if="isLoading"
+            class="absolute inset-0 flex items-center justify-center"
+            aria-live="polite"
+          >
+            <div class="w-14 h-14 rounded-full border-4 border-white/20 border-t-white/80 animate-spin" />
+          </div>
+
+          <div
+            :key="numberKey"
+            class="gm-photo-number absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white/90 text-7xl md:text-8xl font-black tracking-tight drop-shadow-[0_6px_22px_rgba(0,0,0,0.85)]"
+          >
+            {{ current + 1 }}
+          </div>
+
+          <div
+            v-if="watermark"
+            class="absolute right-6 bottom-16 max-w-[70vw] rounded-full bg-black/35 px-4 py-1.5 text-xs md:text-sm text-white/45 backdrop-blur-sm"
+          >
+            {{ watermark }}
+          </div>
         </div>
 
         <!-- Следующая -->
@@ -141,4 +203,23 @@ onBeforeUnmount(() => {
 .gm-fade-leave-active { transition: opacity 0.2s ease; }
 .gm-fade-enter-from,
 .gm-fade-leave-to    { opacity: 0; }
+
+.gm-photo-number {
+  animation: gm-photo-number-fade 0.85s ease-out forwards;
+}
+
+@keyframes gm-photo-number-fade {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.84);
+  }
+  18% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.14);
+  }
+}
 </style>
