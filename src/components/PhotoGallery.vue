@@ -19,12 +19,18 @@ function close() { emit('update:modelValue', null) }
 function go(dir) {
   scale.value = 1
   const next = ((current.value + dir) % total.value + total.value) % total.value
+  // #region agent log
+  fetch('http://127.0.0.1:7277/ingest/cc94e87f-d223-4e50-b5ea-9ad945c95ad9',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'c5ae93'},body:JSON.stringify({sessionId:'c5ae93',location:'PhotoGallery.vue:go',message:'go() called',data:{dir,current:current.value,next,total:total.value},hypothesisId:'H-C',timestamp:Date.now()})}).catch(()=>{})
+  // #endregion
   emit('update:modelValue', next)
 }
 
 function resetZoom() { scale.value = 1 }
 
 function onWheel(e) {
+  // #region agent log
+  fetch('http://127.0.0.1:7277/ingest/cc94e87f-d223-4e50-b5ea-9ad945c95ad9',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'c5ae93'},body:JSON.stringify({sessionId:'c5ae93',location:'PhotoGallery.vue:onWheel',message:'wheel event fired',data:{deltaY:e.deltaY,ctrlKey:e.ctrlKey,target:e.target?.tagName,currentIdx:current.value},hypothesisId:'H-A',timestamp:Date.now()})}).catch(()=>{})
+  // #endregion
   e.preventDefault()
   if (e.ctrlKey) {
     const delta = e.deltaY < 0 ? 1.12 : 0.89
@@ -52,7 +58,12 @@ function onTouchEnd(e) {
 }
 
 // Сброс зума при смене фото
-watch(() => props.modelValue, () => { scale.value = 1 })
+watch(() => props.modelValue, (newVal) => {
+  scale.value = 1
+  // #region agent log
+  fetch('http://127.0.0.1:7277/ingest/cc94e87f-d223-4e50-b5ea-9ad945c95ad9',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'c5ae93'},body:JSON.stringify({sessionId:'c5ae93',location:'PhotoGallery.vue:watch(modelValue)',message:'modelValue changed',data:{newVal,newSrc:props.images[newVal ?? 0]?.src},hypothesisId:'H-D',timestamp:Date.now()})}).catch(()=>{})
+  // #endregion
+})
 
 // Блокировка прокрутки страницы когда галерея открыта
 watch(isOpen, (v) => { document.body.style.overflow = v ? 'hidden' : '' })

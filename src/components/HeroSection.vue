@@ -46,7 +46,7 @@ function previewToGallery(i) {
 
       <!-- Кнопка Галерея — поверх фото, правый нижний угол -->
       <button
-        class="absolute bottom-4 right-4 z-20 flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-base text-white shadow-xl
+        class="absolute bottom-4 right-4 z-30 flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-base text-white shadow-xl
                bg-gradient-to-r from-blue-700 to-emerald-700 hover:from-blue-600 hover:to-emerald-600
                ring-1 ring-emerald-400/30 hover:ring-emerald-400/60
                transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0"
