@@ -38,7 +38,8 @@ src/
 
   components/
     NavBar.vue                 # sticky top-nav, якорные ссылки на все секции
-    HeroSection.vue            # заголовок + aurora-градиент + сетка 2×3 фото
+    HeroSection.vue            # заголовок + aurora-градиент + сетка 2×3 фото + кнопка галереи
+    PhotoGallery.vue           # modal/lightbox для полноразмерных фото: wheel-навигация, Ctrl+wheel zoom, preload/loading UI
     OverviewSection.vue        # «Что это» — карточки-фичи (id=overview)
     PhilosophySection.vue      # раздел 1 — философия и метрики (id=philosophy)
     MnO2Section.vue            # раздел 2 — деполяризатор пиролюзит (id=mno2)
@@ -56,7 +57,7 @@ src/
     AudioSection.vue           # раздел 12 — подготовка аудио NRSC (id=audio)
 
   constants/
-    images.js                  # ASSET_BASE, список .jpg, функция img()
+    images.js                  # ASSET_BASE, PHOTOS, GALLERY_PHOTOS, img(), imgAsset()
     budget.js                  # BUDGET_SECTIONS, BUDGET_TOTAL, CALIBRATION_ITEMS
     receivers.js               # RECEIVERS — массив 10 приёмников
     assembly.js                # ASSEMBLY_STEPS — шаги сборки передатчика
@@ -70,7 +71,8 @@ src/
 - **SVG-схемы (BarrelDiagram, BlockDiagram) — не трогать** без явного запроса: там точные размеры и координаты схем.
 - **Three.js и Chart.js** инициализируются в `onMounted` — код привязан к lifecycle. При изменении логики учитывать `onBeforeUnmount` для очистки.
 - Для Chart.js используется `import { Chart, registerables }` — регистрация `Chart.register(...registerables)` обязательна.
-- Картинки `.jpg` — **не в Vite-bundle**, хранятся отдельно на сервере. Путь: `img('filename.jpg')` из `constants/images.js`. `ASSET_BASE` инжектируется через PHP как `window.ASSET_BASE`.
+- Картинки `.jpg` — **не в Vite-bundle**, хранятся отдельно на сервере. `PHOTOS` — 6 лёгких превью из корня через `img('filename.jpg')`; `GALLERY_PHOTOS` — полноразмерные фото из `assets/` через `imgAsset('filename.jpg')`. `ASSET_BASE` инжектируется через PHP как `window.ASSET_BASE`.
+- Галерея в `PhotoGallery.vue` должна оставаться устойчивой на медленном интернете: новое фото предзагружается через `Image()`, старая картинка блюрится до `onload`, wheel-листание debounce'ится, `Ctrl + wheel` отвечает только за масштаб.
 
 ---
 
@@ -93,7 +95,7 @@ git push → deploy.yml → npm ci → npm run build → python build_presentati
    - Добавляет `<?php define('NO_AGENT_CHECK',...); require prolog_before.php; ?>`
    - Заменяет `<title>` на `$APPLICATION->ShowTitle()`
    - Инжектирует `<script>window.ASSET_BASE='<?= htmlspecialcharsbx($presentationsAssetBase) ?>';</script>`
-   - Копирует весь `dist/` + `.jpg`-изображения в `deploy/`
+   - Копирует весь `dist/`, корневые `.jpg`-превью и папку `assets/` с полноразмерной галереей в `deploy/`
 
 3. **SCP** — всё содержимое `deploy/` + `www/urlrewrite.php` загружается по SSH:
    - Хост: `at5.su`, порт `4422`, пользователь `bitrix`

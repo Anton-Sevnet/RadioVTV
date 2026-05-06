@@ -1,4 +1,5 @@
 <script setup>
+import { ref, onMounted } from 'vue'
 import NavBar            from './components/NavBar.vue'
 import HeroSection       from './components/HeroSection.vue'
 import OverviewSection   from './components/OverviewSection.vue'
@@ -16,6 +17,32 @@ import BudgetTable       from './components/BudgetTable.vue'
 import CalibrationTable  from './components/CalibrationTable.vue'
 import ReceiversSection  from './components/ReceiversSection.vue'
 import AudioSection      from './components/AudioSection.vue'
+
+const showLink = ref(false)
+const recaptchaContainer = ref(null)
+const tgLink = ref('')
+
+onMounted(() => {
+  const script = document.createElement('script')
+  script.src = 'https://www.google.com/recaptcha/api.js?render=explicit'
+  script.async = true
+  script.defer = true
+  script.onload = () => {
+    if (window.grecaptcha) {
+      window.grecaptcha.render(recaptchaContainer.value, {
+        sitekey: '6LcE-dssAAAAADXr3BTVYE3EYvfrR5-uGp6wIyaq',
+        theme: 'dark',
+        callback: (response) => {
+          if (response) {
+            showLink.value = true
+            tgLink.value = 'https://' + ['t', 'm', 'e'].join('.') + '/' + ['s', 'e', 'v', 'n', 'e', 't'].join('')
+          }
+        }
+      })
+    }
+  }
+  document.head.appendChild(script)
+})
 </script>
 
 <template>
@@ -44,8 +71,10 @@ import AudioSection      from './components/AudioSection.vue'
 
     <footer class="max-w-6xl mx-auto px-4 py-10 mt-4 border-t border-white/10 text-center">
       <div class="flex flex-col items-center gap-4">
+        <div v-show="!showLink" ref="recaptchaContainer" class="my-2 min-h-[78px]"></div>
         <a
-          href="https://t.me/sevnet"
+          v-if="showLink"
+          :href="tgLink"
           target="_blank"
           rel="noopener"
           class="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#229ED9]/15 border border-[#229ED9]/30 text-[#229ED9] hover:bg-[#229ED9]/25 hover:border-[#229ED9]/60 transition-all no-underline font-medium text-sm"

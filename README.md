@@ -11,15 +11,17 @@
 - **Vite 5** + **Vue 3** (Composition API) + **Tailwind CSS 3**
 - **Chart.js 4** — графики мощности и тепловыделения по месяцам
 - **Three.js** — интерактивная 3D-сцена размещения антенны
+- **Vue lightbox-галерея** — полноразмерные фото с preload, blur/loading-индикацией, wheel-навигацией и `Ctrl + wheel` масштабом
 - Деплой через **GitHub Actions** → SCP → **Bitrix24** на `alttechno.ru`
 
 ## Структура
 
 ```
 src/
-  components/   # 16 компонентов = 16 секций страницы
+  components/   # секции страницы + PhotoGallery.vue
   constants/    # данные: смета, приёмники, шаги сборки, картинки
   App.vue / main.js / style.css
+assets/                             # полноразмерные фото для галереи
 index.html                          # SEO-метатеги, OG, JSON-LD
 vite.config.js / tailwind.config.js
 .github/
@@ -44,7 +46,7 @@ npm run build     # production-сборка в dist/
 npm ci → npm run build → python .github/scripts/build_presentation.py → SCP → alttechno.ru
 ```
 
-Собранный `dist/index.html` оборачивается в PHP-пролог Bitrix, JS/CSS-чанки и картинки загружаются в `/local/presentations/power_system_zapolyarye/`.
+Собранный `dist/index.html` оборачивается в PHP-пролог Bitrix, JS/CSS-чанки, корневые превью `.jpg` и папка `assets/` с полноразмерной галереей загружаются в `/local/presentations/power_system_zapolyarye/`.
 
 ## О проекте
 
