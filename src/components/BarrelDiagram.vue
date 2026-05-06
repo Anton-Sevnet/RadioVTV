@@ -1,3 +1,10 @@
+<script setup>
+import { ref } from 'vue'
+import FullscreenBtn from './FullscreenBtn.vue'
+
+const containerRef = ref(null)
+</script>
+
 <template>
   <section id="barrel" class="section-card">
     <h2 class="section-heading">
@@ -9,7 +16,8 @@
       Для стабильной работы зимой ячейка помещается ниже уровня промерзания почвы или укрывается снегом.
     </p>
 
-    <div class="overflow-auto rounded-xl border border-white/10 bg-[#1a1a1a] p-2">
+    <div ref="containerRef" class="relative overflow-auto rounded-xl border border-white/10 bg-[#1a1a1a] p-2 vtv-svg-fs">
+      <FullscreenBtn :target-ref="containerRef" />
       <svg viewBox="0 0 1000 700" class="w-full max-w-full" style="min-width:560px; height:auto;">
         <rect width="1000" height="700" fill="#1a1a1a" />
         <!-- Бочка (Контур) -->

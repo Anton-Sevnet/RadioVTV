@@ -2,6 +2,7 @@
 import { onMounted, onBeforeUnmount, ref } from 'vue'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+import FullscreenBtn from './FullscreenBtn.vue'
 
 const legend = [
   { bg: 'bg-[#2ecc71]', label: 'Зелёный — полотно антенны (медь ПуГВ)' },
@@ -13,6 +14,7 @@ const legend = [
 ]
 
 const canvasRef = ref(null)
+const threeRef  = ref(null)
 let renderer, controls, animId
 
 onMounted(() => {
@@ -239,8 +241,10 @@ onMounted(() => {
 
   window.addEventListener('resize', onResize)
   function onResize() {
-    const nw = Math.max(canvas.parentElement ? canvas.parentElement.clientWidth : 800, 320)
-    const nh = Math.min(420, window.innerHeight * 0.65)
+    const parent = canvas.parentElement
+    const isFullscreen = !!document.fullscreenElement || parent?.classList.contains('vtv-fs')
+    const nw = Math.max(parent?.clientWidth ?? 800, 320)
+    const nh = isFullscreen ? window.innerHeight : Math.min(420, window.innerHeight * 0.65)
     const a  = nw / nh
     camera.left   = frustumSize * a / -2
     camera.right  = frustumSize * a / 2
@@ -294,8 +298,10 @@ onBeforeUnmount(() => {
     </div>
 
     <!-- 3D Scene -->
-    <div class="relative rounded-xl overflow-hidden border border-white/10"
+    <div ref="threeRef"
+         class="relative rounded-xl overflow-hidden border border-white/10 vtv-3d-fs"
          style="background: linear-gradient(180deg, #1a2332 0%, #0d1117 100%);">
+      <FullscreenBtn :target-ref="threeRef" />
       <canvas
         ref="canvasRef"
         aria-label="Схема размещения антенны на соснах в изометрии"

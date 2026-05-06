@@ -1,3 +1,10 @@
+<script setup>
+import { ref } from 'vue'
+import FullscreenBtn from './FullscreenBtn.vue'
+
+const containerRef = ref(null)
+</script>
+
 <template>
   <section id="diagram" class="section-card">
     <h2 class="section-heading">
@@ -10,7 +17,8 @@
       Водяное заземление топологии «Звезда» из медной плетёнки.
     </p>
 
-    <div class="overflow-auto rounded-xl border border-white/10 bg-[#1a1a1a] p-2">
+    <div ref="containerRef" class="relative overflow-auto rounded-xl border border-white/10 bg-[#1a1a1a] p-2 vtv-svg-fs">
+      <FullscreenBtn :target-ref="containerRef" />
       <svg viewBox="0 0 1000 650" class="w-full max-w-full" style="min-width:600px; height:auto;">
         <rect width="1000" height="650" fill="#1a1a1a" />
         <text x="500" y="32" fill="#f1c40f" font-size="17" font-weight="bold" text-anchor="middle">Несущая вещания: 1219 кГц (СВ)</text>

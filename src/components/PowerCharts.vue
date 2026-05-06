@@ -1,6 +1,7 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, onBeforeUnmount, ref } from 'vue'
 import { Chart, registerables } from 'chart.js'
+import FullscreenBtn from './FullscreenBtn.vue'
 
 const auditItems = [
   {
@@ -19,10 +20,52 @@ const auditItems = [
     formula: 'P_экв = P_нос · 0.22\nD_откр = 25 · √(P_экв) км\nD_лес = 0.38 · D_откр',
   },
 ]
+
 Chart.register(...registerables)
 
+const powerRef    = ref(null)
+const heatRef     = ref(null)
 const powerCanvasRef = ref(null)
 const heatCanvasRef  = ref(null)
+
+let powerChart = null
+let heatChart  = null
+
+// Dismiss tooltip on second tap / click outside
+function setupTooltipDismissal(canvas, chart) {
+  let wasActive = false
+  canvas.addEventListener('click', () => {
+    if (wasActive) {
+      chart.tooltip.setActiveElements([], { x: 0, y: 0 })
+      chart.setActiveElements([])
+      chart.update('none')
+      wasActive = false
+    } else {
+      requestAnimationFrame(() => {
+        wasActive = chart.tooltip.getActiveElements().length > 0
+      })
+    }
+  })
+}
+
+function onDocClick(e) {
+  ;[
+    { canvas: powerCanvasRef.value, chart: powerChart },
+    { canvas: heatCanvasRef.value,  chart: heatChart },
+  ].forEach(({ canvas, chart }) => {
+    if (!canvas || !chart) return
+    if (!canvas.contains(e.target) && chart.tooltip.getActiveElements().length > 0) {
+      chart.tooltip.setActiveElements([], { x: 0, y: 0 })
+      chart.setActiveElements([])
+      chart.update('none')
+    }
+  })
+}
+
+function onWinResize() {
+  powerChart?.resize()
+  heatChart?.resize()
+}
 
 onMounted(() => {
   const months    = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь']
@@ -61,7 +104,7 @@ onMounted(() => {
   })
 
   // Power chart
-  new Chart(powerCanvasRef.value.getContext('2d'), {
+  powerChart = new Chart(powerCanvasRef.value.getContext('2d'), {
     type: 'bar',
     data: {
       labels: months,
@@ -90,7 +133,7 @@ onMounted(() => {
   })
 
   // Heat chart
-  new Chart(heatCanvasRef.value.getContext('2d'), {
+  heatChart = new Chart(heatCanvasRef.value.getContext('2d'), {
     type: 'line',
     data: {
       labels: months,
@@ -115,6 +158,19 @@ onMounted(() => {
       },
     },
   })
+
+  setupTooltipDismissal(powerCanvasRef.value, powerChart)
+  setupTooltipDismissal(heatCanvasRef.value,  heatChart)
+
+  document.addEventListener('click', onDocClick, { passive: true })
+  window.addEventListener('resize', onWinResize)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', onDocClick)
+  window.removeEventListener('resize', onWinResize)
+  powerChart?.destroy()
+  heatChart?.destroy()
 })
 </script>
 
@@ -139,8 +195,9 @@ onMounted(() => {
       приоритет «мозгам» <strong class="text-white">до 1 Вт</strong>,
       усилитель класса E (П-контур), короткая L-антенна с водяным заземлением «звезда».
     </p>
-    <div class="overflow-x-auto bg-white rounded-xl p-4 mb-8">
-      <div class="min-w-[640px]">
+    <div ref="powerRef" class="relative overflow-x-auto bg-white rounded-xl p-4 mb-8 vtv-chart-fs">
+      <FullscreenBtn :target-ref="powerRef" />
+      <div class="chart-scroll-inner min-w-[640px]">
         <canvas ref="powerCanvasRef" height="100" />
       </div>
     </div>
@@ -152,8 +209,9 @@ onMounted(() => {
       Химическое тепло Q_хим ≈ 1.4·P_бат; электрическое Q_эл = I²R_внутр.
       Снижением эффективности из-за зашламления в пределах 15% пренебрегаем.
     </p>
-    <div class="overflow-x-auto bg-white rounded-xl p-4 mb-6">
-      <div class="min-w-[640px]">
+    <div ref="heatRef" class="relative overflow-x-auto bg-white rounded-xl p-4 mb-6 vtv-chart-fs">
+      <FullscreenBtn :target-ref="heatRef" />
+      <div class="chart-scroll-inner min-w-[640px]">
         <canvas ref="heatCanvasRef" height="100" />
       </div>
     </div>
@@ -211,4 +269,3 @@ onMounted(() => {
     </div>
   </section>
 </template>
-
