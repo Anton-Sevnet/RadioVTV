@@ -18,35 +18,40 @@ import CalibrationTable  from './components/CalibrationTable.vue'
 import ReceiversSection  from './components/ReceiversSection.vue'
 import AudioSection      from './components/AudioSection.vue'
 
-const showLink = ref(false)
 const recaptchaContainerTop = ref(null)
 const recaptchaContainerBottom = ref(null)
-const tgLink = ref('')
+const telegramUrl = ref('')
+
+function renderRecaptcha() {
+  if (!window.grecaptcha) return
+
+  ;[recaptchaContainerTop.value, recaptchaContainerBottom.value].forEach((el) => {
+    if (!el) return
+
+    try {
+      window.grecaptcha.render(el, {
+        sitekey: '6LcE-dssAAAAADXr3BTVYE3EYvfrR5-uGp6wIyaq',
+        theme: 'dark'
+      })
+    } catch {
+      // Контакт не должен исчезать у людей, если Google reCAPTCHA недоступна.
+    }
+  })
+}
 
 onMounted(() => {
+  telegramUrl.value = 'https://' + ['t', 'm', 'e'].join('.') + '/' + ['s', 'e', 'v', 'n', 'e', 't'].join('')
+
+  if (window.grecaptcha) {
+    renderRecaptcha()
+    return
+  }
+
   const script = document.createElement('script')
-  script.src = 'https://www.google.com/recaptcha/api.js?render=explicit'
+  script.src = 'https://www.google.com/recaptcha/api.js?render=explicit&hl=ru'
   script.async = true
   script.defer = true
-  script.onload = () => {
-    if (window.grecaptcha) {
-      const renderWidget = (el) => {
-        if (!el) return
-        window.grecaptcha.render(el, {
-          sitekey: '6LcE-dssAAAAADXr3BTVYE3EYvfrR5-uGp6wIyaq',
-          theme: 'dark',
-          callback: (response) => {
-            if (response) {
-              showLink.value = true
-              tgLink.value = 'https://' + ['t', 'm', 'e'].join('.') + '/' + ['s', 'e', 'v', 'n', 'e', 't'].join('')
-            }
-          }
-        })
-      }
-      renderWidget(recaptchaContainerTop.value)
-      renderWidget(recaptchaContainerBottom.value)
-    }
-  }
+  script.onload = renderRecaptcha
   document.head.appendChild(script)
 })
 </script>
@@ -57,17 +62,16 @@ onMounted(() => {
 
     <HeroSection />
 
-    <div class="max-w-6xl mx-auto px-4 pt-4 flex justify-end">
-      <div v-show="!showLink" ref="recaptchaContainerTop" class="scale-75 origin-right opacity-30 hover:opacity-100 transition-opacity"></div>
+    <div class="max-w-6xl mx-auto px-4 pt-4 flex flex-col items-end gap-1">
       <a
-        v-if="showLink"
-        :href="tgLink"
+        :href="telegramUrl || undefined"
         target="_blank"
         rel="noopener"
-        class="text-gray-500 hover:text-[#229ED9] text-sm transition-colors"
+        class="text-gray-500 hover:text-[#229ED9] text-xs md:text-sm transition-colors"
       >
         Связь с автором: @sevnet
       </a>
+      <div ref="recaptchaContainerTop" class="scale-[0.7] origin-top-right opacity-25 hover:opacity-90 transition-opacity"></div>
     </div>
 
     <main class="max-w-6xl mx-auto px-4 py-6 space-y-0">
@@ -90,10 +94,9 @@ onMounted(() => {
 
     <footer class="max-w-6xl mx-auto px-4 py-10 mt-4 border-t border-white/10 text-center">
       <div class="flex flex-col items-center gap-4">
-        <div v-show="!showLink" ref="recaptchaContainerBottom" class="my-2 min-h-[78px]"></div>
+        <div ref="recaptchaContainerBottom" class="min-h-[78px]"></div>
         <a
-          v-if="showLink"
-          :href="tgLink"
+          :href="telegramUrl || undefined"
           target="_blank"
           rel="noopener"
           class="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#229ED9]/15 border border-[#229ED9]/30 text-[#229ED9] hover:bg-[#229ED9]/25 hover:border-[#229ED9]/60 transition-all no-underline font-medium text-sm"
