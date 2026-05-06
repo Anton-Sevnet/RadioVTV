@@ -15,26 +15,6 @@ onMounted(() => {
   // Ссылку собираем на клиенте: в сыром HTML до гидратации её нет.
   telegramHref.value =
     '\u0068\u0074\u0074\u0070\u0073\u003a\u002f\u002f\u0074\u002e\u006d\u0065\u002f\u0073\u0065\u0076\u006e\u0065\u0074'
-
-  // #region agent log
-  fetch('http://127.0.0.1:7277/ingest/cc94e87f-d223-4e50-b5ea-9ad945c95ad9', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '5cc65f' },
-    body: JSON.stringify({
-      sessionId: '5cc65f',
-      runId: 'tg-cta',
-      hypothesisId: 'H5',
-      location: 'TelegramAuthorCta.vue:onMounted',
-      message: 'telegram_cta_hydrated',
-      data: {
-        variant: props.variant,
-        host: typeof window !== 'undefined' ? window.location.host : '',
-        hasHref: Boolean(telegramHref.value),
-      },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {})
-  // #endregion
 })
 </script>
 

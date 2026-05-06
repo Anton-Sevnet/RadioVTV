@@ -44,68 +44,27 @@ const recaptchaContainer = ref(null)
 const recaptchaShowPanel = ref(true)
 const recaptchaRendered = ref(false)
 
-function debugLog(runId, hypothesisId, location, message, data) {
-  // #region agent log
-  fetch('http://127.0.0.1:7277/ingest/cc94e87f-d223-4e50-b5ea-9ad945c95ad9', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '5cc65f' },
-    body: JSON.stringify({
-      sessionId: '5cc65f',
-      runId,
-      hypothesisId,
-      location,
-      message,
-      data,
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {})
-  // #endregion
-}
-
-function renderRecaptchaWidget(runId) {
+function renderRecaptchaWidget() {
   if (!window.grecaptcha || !recaptchaContainer.value || recaptchaRendered.value) return
 
   try {
-    debugLog(runId, 'H2', 'App.vue:renderRecaptchaWidget', 'recaptcha_before_render', {
-      offsetWidth: recaptchaContainer.value?.offsetWidth,
-      offsetHeight: recaptchaContainer.value?.offsetHeight,
-    })
-
-    const id = window.grecaptcha.render(recaptchaContainer.value, {
+    window.grecaptcha.render(recaptchaContainer.value, {
       sitekey: RECAPTCHA_SITE_KEY,
       theme: 'dark',
       size: 'normal',
     })
-
     recaptchaRendered.value = true
-    debugLog(runId, 'H2', 'App.vue:renderRecaptchaWidget', 'recaptcha_render_ok', {
-      widgetId: id,
-      siteKeyPrefix: RECAPTCHA_SITE_KEY.slice(0, 8),
-    })
-  } catch (err) {
+  } catch {
     recaptchaShowPanel.value = false
-    debugLog(runId, 'H2', 'App.vue:renderRecaptchaWidget', 'recaptcha_render_throw', {
-      name: err?.name,
-      message: err?.message,
-    })
   }
 }
 
-function bootRecaptcha(runId) {
-  debugLog(runId, 'H1', 'App.vue:bootRecaptcha', 'recaptcha_boot', {
-    host: window.location.host,
-    hostname: window.location.hostname,
-    protocol: window.location.protocol,
-    path: window.location.pathname,
-    siteKeyPrefix: RECAPTCHA_SITE_KEY.slice(0, 8),
-    hasGrecaptcha: Boolean(window.grecaptcha),
-  })
-
+function bootRecaptcha() {
   const startRender = () => {
     if (typeof window.grecaptcha.ready === 'function') {
-      window.grecaptcha.ready(() => renderRecaptchaWidget(runId))
+      window.grecaptcha.ready(renderRecaptchaWidget)
     } else {
-      renderRecaptchaWidget(runId)
+      renderRecaptchaWidget()
     }
   }
 
@@ -128,16 +87,14 @@ function bootRecaptcha(runId) {
   script.onload = startRender
   script.onerror = () => {
     recaptchaShowPanel.value = false
-    debugLog(runId, 'H4', 'App.vue:bootRecaptcha', 'recaptcha_script_error', { src: script.src })
   }
   document.head.appendChild(script)
 }
 
 onMounted(() => {
-  const runId = `page-${Date.now()}`
   if (!recaptchaEnabled) return
   void nextTick(() => {
-    bootRecaptcha(runId)
+    bootRecaptcha()
   })
 })
 </script>
