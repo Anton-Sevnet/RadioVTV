@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import NavBar               from './components/NavBar.vue'
 import HeroSection          from './components/HeroSection.vue'
 import TelegramAuthorCta    from './components/TelegramAuthorCta.vue'
@@ -51,6 +51,11 @@ function renderRecaptchaWidget(runId) {
   if (!window.grecaptcha || !recaptchaContainer.value || recaptchaRendered.value) return
 
   try {
+    debugLog(runId, 'H2', 'App.vue:renderRecaptchaWidget', 'recaptcha_before_render', {
+      offsetWidth: recaptchaContainer.value?.offsetWidth,
+      offsetHeight: recaptchaContainer.value?.offsetHeight,
+    })
+
     const id = window.grecaptcha.render(recaptchaContainer.value, {
       sitekey: RECAPTCHA_SITE_KEY,
       theme: 'dark',
@@ -115,7 +120,9 @@ function bootRecaptcha(runId) {
 
 onMounted(() => {
   const runId = `page-${Date.now()}`
-  bootRecaptcha(runId)
+  void nextTick(() => {
+    bootRecaptcha(runId)
+  })
 })
 </script>
 
@@ -145,19 +152,24 @@ onMounted(() => {
 
     <footer class="max-w-6xl mx-auto px-4 py-10 mt-4 border-t border-white/10">
       <div class="flex flex-col items-center gap-6 text-center">
+        <TelegramAuthorCta variant="footer" />
+
         <div
           v-if="recaptchaShowPanel"
-          class="w-full max-w-md rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4"
+          class="w-full max-w-md rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-5"
         >
-          <p class="text-gray-500 text-xs mb-3 m-0 leading-relaxed">
-            Подтверждение reCAPTCHA (Google). Если появляется «ошибка ключа», в консоли reCAPTCHA в списке доменов
-            должны быть <span class="text-gray-400">alttechno.ru</span> и при необходимости
-            <span class="text-gray-400">www.alttechno.ru</span>.
+          <p class="text-gray-500 text-xs mb-4 m-0 leading-relaxed">
+            Антиспам reCAPTCHA (Google). Если появляется «ошибка ключа», в настройках ключа добавьте домены
+            <span class="text-gray-400">alttechno.ru</span>
+            и при необходимости <span class="text-gray-400">www.alttechno.ru</span>, тип ключа —
+            «Флажок v2». Либо задайте корректный ключ в секрете CI
+            <span class="text-gray-400">VITE_RECAPTCHA_SITE_KEY</span>.
           </p>
-          <div ref="recaptchaContainer" class="flex justify-center min-h-[78px]" />
+          <div
+            ref="recaptchaContainer"
+            class="flex justify-center mx-auto w-full min-h-[78px] min-w-[302px]"
+          />
         </div>
-
-        <TelegramAuthorCta variant="footer" />
 
         <p class="text-gray-600 text-xs m-0">
           Радиостанция «Дыхание ВТВ» · 1219 кГц · Кольский полуостров · Заполярье
